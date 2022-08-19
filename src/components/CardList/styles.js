@@ -1,4 +1,4 @@
-import styled, {keyframes} from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 const animate = keyframes`
   0% {
@@ -29,26 +29,28 @@ export const Container = styled.li`
   cursor: pointer;
   transition: all 0.3s;
   position: relative;
-  color: ${props => props.theme.color.white};
+  color: ${(props) => props.theme.color.white};
   animation: ${animate} 0.5s ease;
 
   &:hover {
     opacity: 0.7;
     transform: translateX(10px);
   }
-
-  > div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding-left: 10px;
-  }
 `;
 
 export const TagColor = styled.div`
   width: 10px;
   height: 60%;
-  background-color: ${props => props.colorStatus};
+  background-color: ${(props) => props.colorStatus};
   position: absolute;
   left: 0;
+`;
+
+export const BtnCard = styled.a`
+  text-decoration: none;
+  color: ${(props) => props.theme.color.white};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-left: 10px;
 `;

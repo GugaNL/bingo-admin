@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Container, TagColor } from "./styles";
+import { Container, TagColor, BtnCard } from "./styles";
 
 const CardList = (props) => {
   const { item = {} } = props;
@@ -19,10 +19,10 @@ const CardList = (props) => {
   return (
     <Container>
       <TagColor colorStatus={tagColor} />
-      <div>
+      <BtnCard href="/register-sweepstake">
         <span>{item?.name}</span>
         <small>{item?.date}</small>
-      </div>
+      </BtnCard>
       <h3>{item?.ticketSents} vendidos</h3>
     </Container>
   );
