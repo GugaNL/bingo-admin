@@ -154,7 +154,7 @@ const RegisterSweepstake = (props) => {
 
   return (
     <Container>
-      <ContentHeader title="Novo Sorteio" />
+      <ContentHeader title="Novo Sorteio" showFilters={false} />
       <Content>
         <FieldContent>
           <label>Título do sorteio</label>
@@ -198,7 +198,7 @@ const RegisterSweepstake = (props) => {
             mask="99/99/9999"
             name="datePrizeDraw"
             type="text"
-            className="c-input-field"
+            className="input-date-prize-draw"
             id="iptDatePrizeDrawField"
             placeholder="DD/MM/AAAA"
           />

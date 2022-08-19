@@ -48,6 +48,10 @@ export const FieldContent = styled.div`
     max-width: 250px;
     //width: 100%;
   }
+
+  .input-date-prize-draw {
+    width: 130px;
+  }
 `;
 
 export const ContentInputDesc = styled.div`
@@ -106,6 +110,11 @@ export const ContainerImagesUpload = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   margin-top: 30px;
+
+  @media(max-width: 800px) {
+    grid-template-columns: repeat(1, 1fr);
+    justify-items: center;
+  }
 `;
 
 export const BtnConfirm = styled.div`

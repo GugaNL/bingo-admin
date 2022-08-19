@@ -24,7 +24,7 @@ const List = (props) => {
 
   return (
     <Container>
-      <ContentHeader title="Sorteios" />
+      <ContentHeader title="Sorteios" showFilters />
       <FiltersLegends>
         <button
           type="button"
