@@ -10,6 +10,7 @@ export default {
         black: '#f7931b',
         green: '#32CD32',
         blue: '#4169E1',
+        darkBlue: '#364b75',
         orange: '#ff6961',
         success: '#03bb85',
         info: '#3b5998',

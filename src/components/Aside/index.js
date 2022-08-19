@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Container,
   Header,
@@ -6,29 +6,45 @@ import {
   Title,
   MenuContainer,
   MenuItemLink,
+  ToogleMenu,
 } from "./styles";
 import logo from "../../assets/logo.svg";
 import { menuItems } from "../../utils";
-import {FaStaylinked, FaWpforms, FaAddressBook, FaSignOutAlt, FaRegLifeRing} from 'react-icons/fa';
+import {
+  FaStaylinked,
+  FaWpforms,
+  FaAddressBook,
+  FaSignOutAlt,
+  FaRegLifeRing,
+} from "react-icons/fa";
+import { MdClose, MdMenu } from "react-icons/md";
 
 const Aside = (props) => {
+  const [showToggleMenu, setShowToggleMenu] = useState(false);
 
-    const renderIcon = itemIcon => {
-        if (itemIcon === 'FaStaylinked') {
-            return <FaStaylinked />
-        } else if (itemIcon === 'FaWpforms') {
-            return <FaWpforms />
-        } else if (itemIcon === 'FaAddressBook') {
-            return <FaAddressBook />
-        } else if (itemIcon === 'FaSignOutAlt') {
-            return <FaSignOutAlt />
-        }
-        return <FaRegLifeRing />
+  const handleToggleMenu = () => {
+    setShowToggleMenu(!showToggleMenu);
+  };
+
+  const renderIcon = (itemIcon) => {
+    if (itemIcon === "FaStaylinked") {
+      return <FaStaylinked />;
+    } else if (itemIcon === "FaWpforms") {
+      return <FaWpforms />;
+    } else if (itemIcon === "FaAddressBook") {
+      return <FaAddressBook />;
+    } else if (itemIcon === "FaSignOutAlt") {
+      return <FaSignOutAlt />;
     }
+    return <FaRegLifeRing />;
+  };
 
   return (
-    <Container>
+    <Container menuIsOpen={showToggleMenu}>
       <Header>
+        <ToogleMenu onClick={() => handleToggleMenu()}>
+          {showToggleMenu ? <MdClose /> : <MdMenu />}
+        </ToogleMenu>
         <Logo src={logo} alt="Logo sorteio" />
         <Title>Sorteios</Title>
       </Header>
@@ -36,7 +52,10 @@ const Aside = (props) => {
         {menuItems &&
           menuItems.length > 0 &&
           menuItems.map((item) => (
-            <MenuItemLink href={item.link}>{renderIcon(item.icon)}{item.name}</MenuItemLink>
+            <MenuItemLink href={item.link}>
+              {renderIcon(item.icon)}
+              {item.name}
+            </MenuItemLink>
           ))}
       </MenuContainer>
     </Container>
