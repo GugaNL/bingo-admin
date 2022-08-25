@@ -22,7 +22,7 @@ const RegisterSweepstake = (props) => {
     title: "",
     prize: "",
     prizeImages: [],
-    prizeDescription: [{ id: 1, desc: "algo" }],
+    prizeDescription: [{ id: 1, desc: "" }],
     tickedValue: 0,
     ticketQuantity: 0,
   });

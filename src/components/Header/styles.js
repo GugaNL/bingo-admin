@@ -12,6 +12,9 @@ export const Container = styled.div`
 
   @media(max-width: 600px) {
     border: none;
+    position: fixed;
+    width: 100%;
+    height: 70px;
   }
 `;
 
