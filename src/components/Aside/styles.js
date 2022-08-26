@@ -9,7 +9,7 @@ export const Container = styled.div`
   position: relative;
 
   @media (max-width: 600px) {
-    padding-left: 7px;
+    padding: 0 7px;
     position: fixed;
     z-index: 2;
 

@@ -7,7 +7,7 @@ export const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 15px;
+  padding: 0 35px;
   border-bottom: 1px solid ${(props) => props.theme.color.gray};
 
   @media(max-width: 600px) {
@@ -15,6 +15,7 @@ export const Container = styled.div`
     position: fixed;
     width: 100%;
     height: 70px;
+    z-index: 1;
   }
 `;
 

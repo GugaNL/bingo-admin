@@ -75,10 +75,13 @@ export const ContentInputDesc = styled.div`
 
 export const ContentUploadImage = styled.div`
   position: relative;
+  display: flex;
+  justify-content: center;
   width: 300px;
   height: 300px;
   border: 1px solid ${(props) => props.theme.color.gray};
   margin-top: 40px;
+  z-index: 0;
   //overflow: hidden;
 
   > img {
@@ -111,7 +114,7 @@ export const ContainerImagesUpload = styled.div`
   grid-template-columns: repeat(2, 1fr);
   margin-top: 30px;
 
-  @media(max-width: 800px) {
+  @media (max-width: 800px) {
     grid-template-columns: repeat(1, 1fr);
     justify-items: center;
   }
@@ -134,7 +137,7 @@ export const BtnConfirm = styled.div`
     transition: opacity 0.3;
 
     &:hover {
-      opacity: .8;
+      opacity: 0.8;
     }
   }
 `;
