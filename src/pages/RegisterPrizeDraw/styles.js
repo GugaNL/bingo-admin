@@ -159,7 +159,7 @@ export const ContentPrizeDesc = styled.div`
   flex-direction: column;
   align-self: flex-start;
   align-items: center;
-`
+`;
 
 export const ContainerTicket = styled.div`
   display: flex;
@@ -170,4 +170,17 @@ export const ContainerTicket = styled.div`
   @media (max-width: 435px) {
     flex-direction: column;
   }
+`;
+
+export const ContentLoader = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.7);
 `;

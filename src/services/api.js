@@ -3,9 +3,9 @@ import axios from "axios";
 //const baseURL = "https://sorteio-nodejs.herokuapp.com/api/";
 const baseURL = "http://localhost:5000/api/";
 
-var config = {
-  headers: { "Access-Control-Allow-Origin": "*" },
-};
+// var config = {
+//   headers: { "Access-Control-Allow-Origin": "*" },
+// };
 
 export const api = axios.create({
   baseURL,
@@ -42,6 +42,15 @@ export const newPrizeDraw = async (prizeDraw = {}) => {
       valorBilhete: prizeDraw.valorBilhete || 0
     });
 
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const listPrizeDraws = async () => {
+  try {
+    const response = await api.get("sorteio/lista");
     return response;
   } catch (error) {
     return error;

@@ -1,29 +1,75 @@
-import React, { useState } from "react";
-import { Container, Content, FiltersLegends } from "./styles";
+import React, { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Puff } from "react-loader-spinner";
+import { Container, Content, FiltersLegends, ContentLoader } from "./styles";
 import ContentHeader from "../../components/ContentHeader";
 import CardList from "../../components/CardList";
+import { listPrizeDraws } from "../../services/api";
 //mock
 import { sorteios } from "../../mocks";
 
-const ListPrizeDraws = (props) => {
-  const [sweepstake, setSweepstakes] = useState(sorteios) || [];
+const ListPrizeDraws = () => {
+  const [prizeDraws, setPrizeDraws] = useState(sorteios) || [];
   const [appliedFilter, setAppliedFilter] = useState("");
+  const [loading, setLoading] = useState(true);
+
+
+  const fetchList = async () => {
+    const response = await listPrizeDraws();
+    const { data: responseListPrizeDraws = { } } = response;
+
+    if (responseListPrizeDraws && responseListPrizeDraws.success) {
+      setLoading(false);
+      const {sorteios = []} = responseListPrizeDraws;
+      setPrizeDraws(sorteios);
+    } else {
+      setLoading(false);
+      toast.error("Falha ao listar sorteios", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+      });
+    }
+  };
+
+  useEffect(() => {
+     fetchList();
+  }, []);
 
   const filterList = (filterStatus) => {
     if (filterStatus === appliedFilter) {
-      setSweepstakes(sorteios);
+      setPrizeDraws(sorteios);
       setAppliedFilter('');
     } else {
       setAppliedFilter(filterStatus);
       const filteredList = sorteios.filter(
         (item) => item.status === filterStatus
       );
-      setSweepstakes(filteredList);
+      setPrizeDraws(filteredList);
     }
   };
 
   return (
     <Container>
+      {loading && (
+        <ContentLoader>
+          <Puff
+            height="200"
+            width="200"
+            radisu={1}
+            color="#4fa94d"
+            ariaLabel="puff-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+        </ContentLoader>
+      )}
       <ContentHeader title="Sorteios" showFilters />
       <FiltersLegends>
         <button
@@ -49,10 +95,11 @@ const ListPrizeDraws = (props) => {
         </button>
       </FiltersLegends>
       <Content>
-        {sweepstake.map((item) => (
-          <CardList item={item} />
+        {prizeDraws.length > 0 && prizeDraws.map((item, index) => (
+          <CardList item={item} key={index} />
         ))}
       </Content>
+      <ToastContainer />
     </Container>
   );
 };

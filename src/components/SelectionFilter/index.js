@@ -7,8 +7,8 @@ const SelectionFilter = (props) => {
   return (
     <Container>
       <select>
-        {arrayOptions.map((item) => (
-          <option value={item.value}>{item.name}</option>
+        {arrayOptions.map((item, index) => (
+          <option value={item.value} key={index}>{item.name}</option>
         ))}
       </select>
     </Container>

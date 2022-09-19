@@ -7,23 +7,30 @@ const CardList = (props) => {
 
   const tagColor = useMemo(() => {
     let color = (props) => props.theme.color.danger;
-    if (status === "IN_PROGRESS") {
+    if (status === 'ativo') {
       color = (props) => props.theme.color.green;
-    } else if (status === "FINISHED") {
+    } else if (status === 'finalizado') {
       color = (props) => props.theme.color.blue;
     }
 
     return color;
   }, [status]);
 
+  const formatDate = (rawDate) => {
+    const stringDate = rawDate.split('T')[0];
+    const formattedStringDate = stringDate?.split('-').reverse().join('/');
+
+    return formattedStringDate;
+  };
+
   return (
     <Container>
       <TagColor colorStatus={tagColor} />
       <BtnCard href="/register-sweepstake">
-        <span>{item?.name}</span>
-        <small>{item?.date}</small>
+        <span>{item?.titulo}</span>
+        <small>{item?.data && formatDate(item.data)}</small>
       </BtnCard>
-      <h3>{item?.ticketSents} vendidos</h3>
+      <h3>{item?.bilhetesVendidos} vendidos</h3>
     </Container>
   );
 };

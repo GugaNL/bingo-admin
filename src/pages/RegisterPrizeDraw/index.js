@@ -4,6 +4,7 @@ import InputMask from "react-input-mask";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TimeField from "react-simple-timefield";
+import { Puff } from "react-loader-spinner";
 import { FaChevronCircleDown, FaMinus } from "react-icons/fa";
 import { MdCloudUpload, MdDelete } from "react-icons/md";
 import {
@@ -16,12 +17,13 @@ import {
   ContainerImagesUpload,
   BtnConfirm,
   ContainerTicket,
+  ContentLoader,
 } from "./styles";
 import ContentHeader from "../../components/ContentHeader";
 import { PAGE_LIST_PRIZE_DRAW, ImageTypeRegex } from "../../constants";
 import { newPrizeDraw } from "../../services/api";
 
-const RegisterPrizeDraw = (props) => {
+const RegisterPrizeDraw = () => {
   const navigate = useNavigate();
   const [values, setValues] = useState({
     title: "",
@@ -35,6 +37,7 @@ const RegisterPrizeDraw = (props) => {
   });
   const [images, setImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
+  const [loading, setLoading] = useState(false);
   const fileRef = useRef();
 
   const onChangeInput = (element, descId = null) => {
@@ -128,6 +131,7 @@ const RegisterPrizeDraw = (props) => {
   };
 
   const savePrizeDraw = async () => {
+    setLoading(true);
     let formattedPrizeDesc = "";
     let formattedDate = values?.datePrizeDraw.split("/").reverse().join("-");
 
@@ -153,6 +157,7 @@ const RegisterPrizeDraw = (props) => {
     const { data: responseNewPrizeDraw = {} } = response;
 
     if (responseNewPrizeDraw && responseNewPrizeDraw.success) {
+      setLoading(false);
       toast.success("Sorteio criado com sucesso", {
         position: "top-right",
         autoClose: 2000,
@@ -162,8 +167,11 @@ const RegisterPrizeDraw = (props) => {
         draggable: false,
         progress: undefined,
       });
-      navigate(PAGE_LIST_PRIZE_DRAW);
+      setTimeout(() => {
+        navigate(PAGE_LIST_PRIZE_DRAW);
+      }, 2500);
     } else {
+      setLoading(false);
       toast.error("Falha ao tentar criar o sorteio", {
         position: "top-right",
         autoClose: 2000,
@@ -210,6 +218,20 @@ const RegisterPrizeDraw = (props) => {
 
   return (
     <Container>
+      {loading && (
+        <ContentLoader>
+          <Puff
+            height="200"
+            width="200"
+            radisu={1}
+            color="#4fa94d"
+            ariaLabel="puff-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+        </ContentLoader>
+      )}
       <ContentHeader title="Novo Sorteio" showFilters={false} />
       <Content>
         <FieldContent>
