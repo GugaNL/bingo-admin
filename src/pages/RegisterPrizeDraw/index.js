@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import InputMask from "react-input-mask";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,10 +18,11 @@ import {
   ContainerTicket,
 } from "./styles";
 import ContentHeader from "../../components/ContentHeader";
-import { ImageTypeRegex } from "../../constants";
+import { PAGE_LIST_PRIZE_DRAW, ImageTypeRegex } from "../../constants";
 import { newPrizeDraw } from "../../services/api";
 
-const RegisterSweepstake = (props) => {
+const RegisterPrizeDraw = (props) => {
+  const navigate = useNavigate();
   const [values, setValues] = useState({
     title: "",
     prize: "",
@@ -160,6 +162,7 @@ const RegisterSweepstake = (props) => {
         draggable: false,
         progress: undefined,
       });
+      navigate(PAGE_LIST_PRIZE_DRAW);
     } else {
       toast.error("Falha ao tentar criar o sorteio", {
         position: "top-right",
@@ -387,4 +390,4 @@ const RegisterSweepstake = (props) => {
   );
 };
 
-export default RegisterSweepstake;
+export default RegisterPrizeDraw;

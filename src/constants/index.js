@@ -1,3 +1,7 @@
+//Pages
+export const PAGE_LIST_PRIZE_DRAW = '/sweepstakes';
+export const PAGE_NEW_PRIZE_DRAW = '/register-sweepstake';
+
 export const months = [
   { name: "Janeiro", value: 1 },
   { name: "Fevereiro", value: 2 },

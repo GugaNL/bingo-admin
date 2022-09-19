@@ -1,14 +1,15 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import List from "../pages/List";
+import ListPrizeDraws from "../pages/ListPrizeDraws";
 import Layout from "../components/Layout";
-import RegisterSweepstake from "../pages/RegisterSweepstake";
+import RegisterPrizeDraw from "../pages/RegisterPrizeDraw";
+import { PAGE_NEW_PRIZE_DRAW, PAGE_LIST_PRIZE_DRAW } from '../constants';
 
 const AppRoutes = () => (
   <Layout>
     <Routes>
-      <Route path="/sweepstakes" element={<List/>} />
-      <Route path="/register-sweepstake" element={<RegisterSweepstake/>} />
+      <Route path={PAGE_LIST_PRIZE_DRAW} element={<ListPrizeDraws/>} />
+      <Route path={PAGE_NEW_PRIZE_DRAW} element={<RegisterPrizeDraw/>} />
     </Routes>
   </Layout>
 );

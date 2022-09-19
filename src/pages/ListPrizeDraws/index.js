@@ -5,7 +5,7 @@ import CardList from "../../components/CardList";
 //mock
 import { sorteios } from "../../mocks";
 
-const List = (props) => {
+const ListPrizeDraws = (props) => {
   const [sweepstake, setSweepstakes] = useState(sorteios) || [];
   const [appliedFilter, setAppliedFilter] = useState("");
 
@@ -57,4 +57,4 @@ const List = (props) => {
   );
 };
 
-export default List;
+export default ListPrizeDraws;
