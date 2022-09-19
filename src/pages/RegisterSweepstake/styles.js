@@ -49,6 +49,18 @@ export const FieldContent = styled.div`
     //width: 100%;
   }
 
+  .input-title {
+    //width: 400px;
+  }
+
+  .input-prize {
+    //width: 500px;
+  }
+
+  .input-prize-desc {
+    //width: 500px;
+  }
+
   .input-date-prize-draw {
     width: 130px;
   }
@@ -139,5 +151,23 @@ export const BtnConfirm = styled.div`
     &:hover {
       opacity: 0.8;
     }
+  }
+`;
+
+export const ContentPrizeDesc = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  align-items: center;
+`
+
+export const ContainerTicket = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 400px;
+
+  @media (max-width: 435px) {
+    flex-direction: column;
   }
 `;

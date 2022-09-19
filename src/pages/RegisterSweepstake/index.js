@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import InputMask from "react-input-mask";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import TimeField from "react-simple-timefield";
 import { FaChevronCircleDown, FaMinus } from "react-icons/fa";
 import { MdCloudUpload, MdDelete } from "react-icons/md";
 import {
@@ -12,18 +13,22 @@ import {
   ContentUploadImage,
   BtnDeleteImg,
   ContainerImagesUpload,
-  BtnConfirm
+  BtnConfirm,
+  ContainerTicket,
 } from "./styles";
 import ContentHeader from "../../components/ContentHeader";
 import { ImageTypeRegex } from "../../constants";
+import { newPrizeDraw } from "../../services/api";
 
 const RegisterSweepstake = (props) => {
   const [values, setValues] = useState({
     title: "",
     prize: "",
+    datePrizeDraw: "",
+    timePrizeDraw: "",
     prizeImages: [],
     prizeDescription: [{ id: 1, desc: "" }],
-    tickedValue: 0,
+    ticketValue: 0,
     ticketQuantity: 0,
   });
   const [images, setImages] = useState([]);
@@ -38,13 +43,17 @@ const RegisterSweepstake = (props) => {
         return {
           ...values,
           prizeDescription: [
-            ...prev.prizeDescription.map((feat) => {
-              if (feat.id === descId) {
-              }
-            }),
+            ...prev.prizeDescription.map((item) =>
+              item.id === descId ? { ...item, desc: inputValue } : item
+            ),
           ],
         };
       });
+    } else if (inputName === "ticketQuantity" || inputName === "ticketValue") {
+      const reg = /^\d+\.?\d{0,2}?$/;
+      if (reg.test(inputValue)) {
+        setValues({ ...values, [inputName]: inputValue });
+      }
     } else {
       setValues({ ...values, [inputName]: inputValue });
     }
@@ -107,17 +116,61 @@ const RegisterSweepstake = (props) => {
     setImages([...arrayAuxImages]);
   };
 
-  const savePrizeDraw = () => {
-    console.log(values);
-    toast.success('Sorteio criado com sucesso', {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: false,
-      progress: undefined,
+  const mountPrizeDesc = (desc) => {
+    const formattedDesc =
+      desc.map((item) => {
+        return item.desc;
+      }) || [];
+    const stringDesc = formattedDesc.join(";") || "";
+    return stringDesc;
+  };
+
+  const savePrizeDraw = async () => {
+    let formattedPrizeDesc = "";
+    let formattedDate = values?.datePrizeDraw.split("/").reverse().join("-");
+
+    if (values.timePrizeDraw) {
+      formattedDate = formattedDate.concat(" ").concat(values.timePrizeDraw);
+    }
+
+    if (values.prizeDescription && values.prizeDescription.length > 0) {
+      formattedPrizeDesc = mountPrizeDesc(values.prizeDescription);
+    }
+
+    const payload = {
+      titulo: values.title,
+      descricao: formattedPrizeDesc,
+      data: formattedDate,
+      premio: values.prize,
+      totalBilhetes: values.ticketQuantity,
+      valorBilhete: values.ticketValue,
+    };
+
+    const response = await newPrizeDraw(payload);
+
+    const { data: responseNewPrizeDraw = {} } = response;
+
+    if (responseNewPrizeDraw && responseNewPrizeDraw.success) {
+      toast.success("Sorteio criado com sucesso", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
       });
+    } else {
+      toast.error("Falha ao tentar criar o sorteio", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+      });
+    }
   };
 
   useEffect(() => {
@@ -163,11 +216,12 @@ const RegisterSweepstake = (props) => {
             name="title"
             type="text"
             autoCapitalize="words"
+            className="input-title"
             //autoComplete="given-name"
             //maxLength={INPUT_MAX_LENGTH}
             //className="input-field"
             //aria-label={labelFirstName}
-            placeholder="Texto que será exibido"
+            //placeholder="Texto que será exibido"
             value={values.title || ""}
             onChange={(event) => onChangeInput(event.target)}
           />
@@ -179,35 +233,60 @@ const RegisterSweepstake = (props) => {
             name="prize"
             type="text"
             autoCapitalize="words"
+            className="input-prize"
             //autoComplete="given-name"
             //maxLength={INPUT_MAX_LENGTH}
-            //className="input-field"
             //aria-label={labelFirstName}
-            placeholder="Informe o prêmio"
+            //placeholder="Informe o prêmio"
             value={values.prize || ""}
             onChange={(event) => onChangeInput(event.target)}
           />
         </FieldContent>
 
-        <FieldContent>
-          <label>Data do sorteio</label>
-          <InputMask
-            //onBlur={event => onBlur(event)}
-            onChange={(event) => onChangeInput(event.target)}
-            value={values.datePrizeDraw || ""}
-            mask="99/99/9999"
-            name="datePrizeDraw"
-            type="text"
-            className="input-date-prize-draw"
-            id="iptDatePrizeDrawField"
-            placeholder="DD/MM/AAAA"
-          />
-        </FieldContent>
-
+        <ContainerTicket>
+          <FieldContent>
+            <label>Data do sorteio</label>
+            <InputMask
+              onChange={(event) => onChangeInput(event.target)}
+              value={values.datePrizeDraw || ""}
+              mask="99/99/9999"
+              name="datePrizeDraw"
+              type="text"
+              className="input-date-prize-draw"
+              id="iptDatePrizeDrawField"
+              placeholder="DD/MM/AAAA"
+            />
+          </FieldContent>
+          <FieldContent>
+            <label>Horário do sorteio</label>
+            {/* <input
+              id="iptTimePrizeDrawField"
+              name="timePrizeDraw"
+              type="time"
+              //pattern="[0-9]{2}:[0-9]{2}"
+              className="input-date-prize-draw"
+              value={values.timePrizeDraw}
+              onChange={(event) => onChangeInput(event.target)}
+            /> */}
+            <TimeField
+              id="iptTimePrizeDrawField"
+              name="timePrizeDraw"
+              value={values.timePrizeDraw}
+              onChange={(event) => onChangeInput(event.target)}
+              style={{
+                fontSize: 16,
+                width: 60,
+                padding: "6px",
+                color: "#333",
+                borderRadius: 5,
+              }}
+            />
+          </FieldContent>
+        </ContainerTicket>
         <ContainerImagesUpload>
           {images.length > 0 &&
             images.map((imageSrc, index) => (
-              <ContentUploadImage>
+              <ContentUploadImage key={index}>
                 <img src={imageSrc} alt="imagem para upload" />
                 <BtnDeleteImg onClick={() => removeImage(index)}>
                   <MdDelete />
@@ -241,7 +320,7 @@ const RegisterSweepstake = (props) => {
           <label>Características do prêmio</label>
           {values.prizeDescription.length > 0 &&
             values.prizeDescription.map((item, index) => (
-              <>
+              <div key={index}>
                 <ContentInputDesc>
                   {index > 0 && (
                     <button
@@ -256,21 +335,49 @@ const RegisterSweepstake = (props) => {
                     name="prizeDescription"
                     type="text"
                     autoCapitalize="words"
+                    className="input-prize-desc"
                     //autoComplete="given-name"
                     //maxLength={INPUT_MAX_LENGTH}
                     //className="input-field"
                     //aria-label={labelFirstName}
                     //placeholder="Informe o prêmio"
-                    value={values.prizeDescription[index].desc || ""}
+                    value={item.desc || ""}
                     onChange={(event) => onChangeInput(event.target, item.id)}
                   />
                 </ContentInputDesc>
-              </>
+              </div>
             ))}
           <button className="btn-add" onClick={() => addFeature()}>
             <FaChevronCircleDown />
           </button>
         </FieldContent>
+        <ContainerTicket>
+          <FieldContent>
+            <label>Valor do bilhete</label>
+            <input
+              id="iptTicketValueField"
+              name="ticketValue"
+              type="text"
+              pattern="[0-9]*"
+              className="input-date-prize-draw"
+              value={values.ticketValue || ""}
+              onChange={(event) => onChangeInput(event.target)}
+            />
+          </FieldContent>
+          <FieldContent>
+            <label>Total de bilhetes disponíveis</label>
+            <input
+              id="iptTotalTicketField"
+              name="ticketQuantity"
+              type="text"
+              //pattern='[0-9]'
+              className="input-date-prize-draw"
+              //placeholder="Total"
+              value={values.ticketQuantity || ""}
+              onChange={(event) => onChangeInput(event.target)}
+            />
+          </FieldContent>
+        </ContainerTicket>
         <BtnConfirm>
           <button onClick={() => savePrizeDraw()}>Criar</button>
         </BtnConfirm>

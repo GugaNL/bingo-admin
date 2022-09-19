@@ -51,8 +51,8 @@ const Aside = (props) => {
       <MenuContainer>
         {menuItems &&
           menuItems.length > 0 &&
-          menuItems.map((item) => (
-            <MenuItemLink href={item.link}>
+          menuItems.map((item, index) => (
+            <MenuItemLink href={item.link} key={index}>
               {renderIcon(item.icon)}
               {item.name}
             </MenuItemLink>
