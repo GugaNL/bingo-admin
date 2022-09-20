@@ -44,6 +44,8 @@ export const TagColor = styled.div`
   background-color: ${(props) => props.colorStatus};
   position: absolute;
   left: 0;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
 `;
 
 export const BtnCard = styled.a`
