@@ -56,3 +56,12 @@ export const listPrizeDraws = async () => {
     return error;
   }
 };
+
+export const findPrizeDraw = async (id) => {
+  try {
+    const response = await api.get(`sorteio/${id}`);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};

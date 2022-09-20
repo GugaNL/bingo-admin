@@ -44,6 +44,7 @@ export function isValidDate(date) {
         return false;
       }
 
+      // eslint-disable-next-line no-mixed-operators
       if (mounth >= 1 <= 12 && day >= 1 <= 31) {
         return true;
       }
@@ -85,3 +86,17 @@ export function isLegalAge(date) {
 
   return true;
 }
+
+export const formatDate = (rawDate) => {
+  const stringDate = rawDate.split("T")[0];
+  const formattedStringDate = stringDate?.split("-").reverse().join("/");
+
+  return formattedStringDate;
+};
+
+export const formatTime = (rawDate) => {
+  const stringTime = rawDate.split("T")[1];
+  const formattedStringTime = stringTime.slice(0,-8);
+
+  return formattedStringTime;
+};

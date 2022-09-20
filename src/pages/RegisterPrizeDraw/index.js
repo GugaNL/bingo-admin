@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import InputMask from "react-input-mask";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,11 +21,15 @@ import {
 } from "./styles";
 import ContentHeader from "../../components/ContentHeader";
 import { PAGE_LIST_PRIZE_DRAW, ImageTypeRegex } from "../../constants";
-import { newPrizeDraw } from "../../services/api";
+import { newPrizeDraw, findPrizeDraw } from "../../services/api";
+import { formatDate, formatTime } from "../../utils/helpers";
 
 const RegisterPrizeDraw = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const prizeDrawToEdit = searchParams.get("prizeDrawToEdit") || null;
   const [values, setValues] = useState({
+    id: null,
     title: "",
     prize: "",
     datePrizeDraw: "",
@@ -39,6 +43,44 @@ const RegisterPrizeDraw = () => {
   const [imageFiles, setImageFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const fileRef = useRef();
+
+  const loadPrizeDescription = (prizeDescription) => {
+    const arrayDesc = prizeDescription?.split(";") || [];
+    const formattedArrayDesc =
+      arrayDesc.map((item, index) => {
+        return { id: index + 1, desc: item };
+      }) || [];
+    return formattedArrayDesc;
+  };
+
+  const loadPrizeDraw = async () => {
+    const response = await findPrizeDraw(prizeDrawToEdit);
+    const { data: responseFindPrizeDraw = {} } = response;
+    if (responseFindPrizeDraw && responseFindPrizeDraw.success) {
+      const { sorteio = {} } = responseFindPrizeDraw;
+
+      const prizeDescriptionFormatted = loadPrizeDescription(
+        sorteio.descricao
+      ) || [{ id: 1, desc: "" }];
+
+      setValues({
+        id: sorteio.id,
+        title: sorteio.titulo,
+        prize: sorteio.premio,
+        datePrizeDraw: formatDate(sorteio.data),
+        timePrizeDraw: formatTime(sorteio.data),
+        prizeDescription: prizeDescriptionFormatted,
+        ticketValue: sorteio.valorBilhete,
+        ticketQuantity: sorteio.totalBilhetes,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (prizeDrawToEdit) {
+      loadPrizeDraw();
+    }
+  }, [prizeDrawToEdit]);
 
   const onChangeInput = (element, descId = null) => {
     const inputName = element.name;
@@ -343,7 +385,8 @@ const RegisterPrizeDraw = () => {
 
         <FieldContent>
           <label>Características do prêmio</label>
-          {values.prizeDescription.length > 0 &&
+          {values.prizeDescription &&
+            values.prizeDescription.length > 0 &&
             values.prizeDescription.map((item, index) => (
               <div key={index}>
                 <ContentInputDesc>
