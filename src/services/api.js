@@ -34,12 +34,12 @@ export const newClient = async (client) => {
 export const newPrizeDraw = async (prizeDraw = {}) => {
   try {
     const response = await api.post("sorteio/novo", {
-      titulo: prizeDraw.titulo || '',
-      descricao: prizeDraw.descricao || '',
+      titulo: prizeDraw.titulo || "",
+      descricao: prizeDraw.descricao || "",
       data: prizeDraw.data,
-      premio: prizeDraw.premio || '',
+      premio: prizeDraw.premio || "",
       totalBilhetes: prizeDraw.totalBilhetes || 0,
-      valorBilhete: prizeDraw.valorBilhete || 0
+      valorBilhete: prizeDraw.valorBilhete || 0,
     });
 
     return response;
@@ -60,6 +60,22 @@ export const listPrizeDraws = async () => {
 export const findPrizeDraw = async (id) => {
   try {
     const response = await api.get(`sorteio/${id}`);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const updatePrizeDraw = async (prizeDraw = {}) => {
+  try {
+    const response = await api.put(`sorteio/${prizeDraw.id}`, {
+      titulo: prizeDraw.titulo || "",
+      descricao: prizeDraw.descricao || "",
+      data: prizeDraw.data,
+      premio: prizeDraw.premio || "",
+      totalBilhetes: prizeDraw.totalBilhetes || 0,
+      valorBilhete: prizeDraw.valorBilhete || 0,
+    });
     return response;
   } catch (error) {
     return error;

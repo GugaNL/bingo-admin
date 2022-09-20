@@ -21,8 +21,11 @@ import {
 } from "./styles";
 import ContentHeader from "../../components/ContentHeader";
 import { PAGE_LIST_PRIZE_DRAW, ImageTypeRegex } from "../../constants";
-import { newPrizeDraw, findPrizeDraw } from "../../services/api";
-import { formatDate, formatTime } from "../../utils/helpers";
+import {
+  newPrizeDraw,
+  findPrizeDraw,
+  updatePrizeDraw,
+} from "../../services/api";
 
 const RegisterPrizeDraw = () => {
   const navigate = useNavigate();
@@ -58,17 +61,25 @@ const RegisterPrizeDraw = () => {
     const { data: responseFindPrizeDraw = {} } = response;
     if (responseFindPrizeDraw && responseFindPrizeDraw.success) {
       const { sorteio = {} } = responseFindPrizeDraw;
+      let prizeDate = "";
+      let prizeTime = "";
 
       const prizeDescriptionFormatted = loadPrizeDescription(
         sorteio.descricao
       ) || [{ id: 1, desc: "" }];
 
+      if (sorteio.data) {
+        sorteio.data = new Date(sorteio.data).toLocaleString('pt-BR');
+        prizeDate = sorteio.data.split(" ")[0]
+        prizeTime = sorteio.data.split(" ")[1]
+      }
+
       setValues({
         id: sorteio.id,
         title: sorteio.titulo,
         prize: sorteio.premio,
-        datePrizeDraw: formatDate(sorteio.data),
-        timePrizeDraw: formatTime(sorteio.data),
+        datePrizeDraw: prizeDate,
+        timePrizeDraw: prizeTime,
         prizeDescription: prizeDescriptionFormatted,
         ticketValue: sorteio.valorBilhete,
         ticketQuantity: sorteio.totalBilhetes,
@@ -172,6 +183,30 @@ const RegisterPrizeDraw = () => {
     return stringDesc;
   };
 
+  const showToast = (message, type) => {
+    if (type === 'success') {
+      toast.success(message, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+      });
+    } else {
+      toast.error(message, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+      });
+    }
+  };
+
   const savePrizeDraw = async () => {
     setLoading(true);
     let formattedPrizeDesc = "";
@@ -186,6 +221,7 @@ const RegisterPrizeDraw = () => {
     }
 
     const payload = {
+      id: values.id,
       titulo: values.title,
       descricao: formattedPrizeDesc,
       data: formattedDate,
@@ -194,35 +230,34 @@ const RegisterPrizeDraw = () => {
       valorBilhete: values.ticketValue,
     };
 
-    const response = await newPrizeDraw(payload);
+    if (values.id) {
+      const response = await updatePrizeDraw(payload);
+      const { data: responseUpdatePrizeDraw = {} } = response;
 
-    const { data: responseNewPrizeDraw = {} } = response;
-
-    if (responseNewPrizeDraw && responseNewPrizeDraw.success) {
-      setLoading(false);
-      toast.success("Sorteio criado com sucesso", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: false,
-        progress: undefined,
-      });
-      setTimeout(() => {
-        navigate(PAGE_LIST_PRIZE_DRAW);
-      }, 2500);
+      if (responseUpdatePrizeDraw && responseUpdatePrizeDraw.success) {
+        setLoading(false);
+        showToast("Sorteio alterado com sucesso", "success");
+        setTimeout(() => {
+          navigate(PAGE_LIST_PRIZE_DRAW);
+        }, 2500);
+      } else {
+        setLoading(false);
+        showToast("Falha ao tentar alterar o sorteio", "error");
+      }
     } else {
-      setLoading(false);
-      toast.error("Falha ao tentar criar o sorteio", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: false,
-        progress: undefined,
-      });
+      const response = await newPrizeDraw(payload);
+      const { data: responseNewPrizeDraw = {} } = response;
+
+      if (responseNewPrizeDraw && responseNewPrizeDraw.success) {
+        setLoading(false);
+        showToast("Sorteio criado com sucesso", "success");
+        setTimeout(() => {
+          navigate(PAGE_LIST_PRIZE_DRAW);
+        }, 2500);
+      } else {
+        setLoading(false);
+        showToast("Falha ao tentar criar o sorteio", "error");
+      }
     }
   };
 
@@ -447,7 +482,9 @@ const RegisterPrizeDraw = () => {
           </FieldContent>
         </ContainerTicket>
         <BtnConfirm>
-          <button onClick={() => savePrizeDraw()}>Criar</button>
+          <button onClick={() => savePrizeDraw()}>
+            {values.id ? "Salvar" : "Criar"}
+          </button>
         </BtnConfirm>
       </Content>
       <ToastContainer />
