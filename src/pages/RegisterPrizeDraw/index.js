@@ -309,7 +309,7 @@ const RegisterPrizeDraw = () => {
           />
         </ContentLoader>
       )}
-      <ContentHeader title="Novo Sorteio" showFilters={false} />
+      <ContentHeader title={values.id ? 'Editar Sorteio' : 'Novo Sorteio'} showFilters={false} />
       <Content>
         <FieldContent>
           <label>Título do sorteio</label>

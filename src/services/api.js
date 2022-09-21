@@ -12,23 +12,62 @@ export const api = axios.create({
 });
 
 //Cliente
-export const newClient = async (client) => {
+export const createCustomer = async (customer) => {
   const response = await api.post("cliente/novo", {
-    nome: client.nome,
-    sobrenome: client.sobrenome,
-    cpf: client.cpf,
-    email: client.email,
-    senha: client.senha,
-    endereco: client.endereco,
-    numeroEndereco: client.numeroEndereco,
-    bairro: client.bairro,
-    cidade: client.cidade,
-    uf: client.uf,
-    cep: client.cep,
+    nome: customer.nome,
+    sobrenome: customer.sobrenome,
+    cpf: customer.cpf,
+    email: customer.email,
+    senha: customer.senha,
+    endereco: customer.endereco,
+    numeroEndereco: customer.numeroEndereco,
+    bairro: customer.bairro,
+    cidade: customer.cidade,
+    uf: customer.uf,
+    cep: customer.cep,
   });
 
   return response;
 };
+
+export const listCustomers = async () => {
+  try {
+    const response = await api.get("cliente/lista");
+    return response;
+  } catch (error) {
+    return error;
+  }
+}
+
+export const findCustomer = async (id) => {
+  try {
+    const response = await api.get(`cliente/${id}`);
+    return response;
+  } catch (error) {
+    return error;
+  }
+}
+
+export const updateCustomer = async (customer = {}) => {
+  try {
+    const response = await api.put(`cliente/${customer.id}`, {
+      nome: customer.nome,
+      sobrenome: customer.sobrenome,
+      email: customer.email,
+      senha: customer.senha,
+      endereco: customer.endereco,
+      numeroEndereco: customer.numeroEndereco,
+      bairro: customer.bairro,
+      cidade: customer.cidade,
+      uf: customer.uf,
+      cep: customer.cep,
+    });
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
 
 //Sorteio
 export const newPrizeDraw = async (prizeDraw = {}) => {
