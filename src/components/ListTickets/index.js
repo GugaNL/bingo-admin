@@ -3,7 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Puff } from "react-loader-spinner";
 import {
-  Container,
+  ContentLoader,
   ContentLegends,
   SquareLegend,
   ContentNumbers,
@@ -61,6 +61,17 @@ const ListTickets = (props) => {
       mountArrayTotalTickets(bilhetes);
       countStatus(bilhetes);
       setLoading(false);
+    } else {
+      setLoading(false);
+      toast.error("Falha ao listar os números", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+      });
     }
   };
 
@@ -85,6 +96,20 @@ const ListTickets = (props) => {
 
   return (
     <>
+      {loading && (
+        <ContentLoader>
+          <Puff
+            height="200"
+            width="200"
+            radisu={1}
+            color="#4fa94d"
+            ariaLabel="puff-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+        </ContentLoader>
+      )}
       <ContentLegends>
         <SquareLegend colorStatus="lightGray">
           Livre ({freeNumbers.length})
@@ -112,6 +137,7 @@ const ListTickets = (props) => {
             );
           })}
       </ContentNumbers>
+      <ToastContainer />
     </>
   );
 };
