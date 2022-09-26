@@ -184,3 +184,25 @@ export const ContentLoader = styled.div`
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.7);
 `;
+
+export const BtnNumbers = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+
+  > button {
+    width: 200px;
+    padding: 13px 8px;
+    border-radius: 5px;
+    background: ${(props) => props.theme.color.orange};
+    color: ${(props) => props.theme.color.white};
+    font-size: 15px;
+    font-weight: bold;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    transition: opacity 0.3;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+`;

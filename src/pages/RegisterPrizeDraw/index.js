@@ -16,10 +16,12 @@ import {
   BtnDeleteImg,
   ContainerImagesUpload,
   BtnConfirm,
+  BtnNumbers,
   ContainerTicket,
   ContentLoader,
 } from "./styles";
 import ContentHeader from "../../components/ContentHeader";
+import ListTickets from "../../components/ListTickets";
 import { PAGE_LIST_PRIZE_DRAW, ImageTypeRegex } from "../../constants";
 import {
   newPrizeDraw,
@@ -45,6 +47,7 @@ const RegisterPrizeDraw = () => {
   const [images, setImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showTickets, setShowTickets] = useState(false);
   const fileRef = useRef();
 
   const loadPrizeDescription = (prizeDescription) => {
@@ -69,9 +72,9 @@ const RegisterPrizeDraw = () => {
       ) || [{ id: 1, desc: "" }];
 
       if (sorteio.data) {
-        sorteio.data = new Date(sorteio.data).toLocaleString('pt-BR');
-        prizeDate = sorteio.data.split(" ")[0]
-        prizeTime = sorteio.data.split(" ")[1]
+        sorteio.data = new Date(sorteio.data).toLocaleString("pt-BR");
+        prizeDate = sorteio.data.split(" ")[0];
+        prizeTime = sorteio.data.split(" ")[1];
       }
 
       setValues({
@@ -184,7 +187,7 @@ const RegisterPrizeDraw = () => {
   };
 
   const showToast = (message, type) => {
-    if (type === 'success') {
+    if (type === "success") {
       toast.success(message, {
         position: "top-right",
         autoClose: 2000,
@@ -309,59 +312,80 @@ const RegisterPrizeDraw = () => {
           />
         </ContentLoader>
       )}
-      <ContentHeader title={values.id ? 'Editar Sorteio' : 'Novo Sorteio'} showFilters={false} />
+      <ContentHeader
+        title={values.id ? "Editar Sorteio" : "Novo Sorteio"}
+        showFilters={false}
+      />
       <Content>
-        <FieldContent>
-          <label>Título do sorteio</label>
-          <input
-            id="iptTitleField"
-            name="title"
-            type="text"
-            autoCapitalize="words"
-            className="input-title"
-            //autoComplete="given-name"
-            //maxLength={INPUT_MAX_LENGTH}
-            //className="input-field"
-            //aria-label={labelFirstName}
-            //placeholder="Texto que será exibido"
-            value={values.title || ""}
-            onChange={(event) => onChangeInput(event.target)}
-          />
-        </FieldContent>
-        <FieldContent>
-          <label>Prêmio</label>
-          <input
-            id="iptPrizeField"
-            name="prize"
-            type="text"
-            autoCapitalize="words"
-            className="input-prize"
-            //autoComplete="given-name"
-            //maxLength={INPUT_MAX_LENGTH}
-            //aria-label={labelFirstName}
-            //placeholder="Informe o prêmio"
-            value={values.prize || ""}
-            onChange={(event) => onChangeInput(event.target)}
-          />
-        </FieldContent>
+        {values.id && !showTickets && (
+          <BtnNumbers>
+            <button onClick={() => setShowTickets(true)}>
+              Gerenciar números
+            </button>
+          </BtnNumbers>
+        )}
+        {showTickets ? (
+          <>
+          <BtnNumbers>
+            <button onClick={() => setShowTickets(false)}>
+              Voltar
+            </button>
+          </BtnNumbers>
+            <ListTickets sorteioId={values.id} totalTickets={values.ticketQuantity} />
+          </>
+        ) : (
+          <>
+            <FieldContent>
+              <label>Título do sorteio</label>
+              <input
+                id="iptTitleField"
+                name="title"
+                type="text"
+                autoCapitalize="words"
+                className="input-title"
+                //autoComplete="given-name"
+                //maxLength={INPUT_MAX_LENGTH}
+                //className="input-field"
+                //aria-label={labelFirstName}
+                //placeholder="Texto que será exibido"
+                value={values.title || ""}
+                onChange={(event) => onChangeInput(event.target)}
+              />
+            </FieldContent>
+            <FieldContent>
+              <label>Prêmio</label>
+              <input
+                id="iptPrizeField"
+                name="prize"
+                type="text"
+                autoCapitalize="words"
+                className="input-prize"
+                //autoComplete="given-name"
+                //maxLength={INPUT_MAX_LENGTH}
+                //aria-label={labelFirstName}
+                //placeholder="Informe o prêmio"
+                value={values.prize || ""}
+                onChange={(event) => onChangeInput(event.target)}
+              />
+            </FieldContent>
 
-        <ContainerTicket>
-          <FieldContent>
-            <label>Data do sorteio</label>
-            <InputMask
-              onChange={(event) => onChangeInput(event.target)}
-              value={values.datePrizeDraw || ""}
-              mask="99/99/9999"
-              name="datePrizeDraw"
-              type="text"
-              className="input-date-prize-draw"
-              id="iptDatePrizeDrawField"
-              placeholder="DD/MM/AAAA"
-            />
-          </FieldContent>
-          <FieldContent>
-            <label>Horário do sorteio</label>
-            {/* <input
+            <ContainerTicket>
+              <FieldContent>
+                <label>Data do sorteio</label>
+                <InputMask
+                  onChange={(event) => onChangeInput(event.target)}
+                  value={values.datePrizeDraw || ""}
+                  mask="99/99/9999"
+                  name="datePrizeDraw"
+                  type="text"
+                  className="input-date-prize-draw"
+                  id="iptDatePrizeDrawField"
+                  placeholder="DD/MM/AAAA"
+                />
+              </FieldContent>
+              <FieldContent>
+                <label>Horário do sorteio</label>
+                {/* <input
               id="iptTimePrizeDrawField"
               name="timePrizeDraw"
               type="time"
@@ -370,122 +394,126 @@ const RegisterPrizeDraw = () => {
               value={values.timePrizeDraw}
               onChange={(event) => onChangeInput(event.target)}
             /> */}
-            <TimeField
-              id="iptTimePrizeDrawField"
-              name="timePrizeDraw"
-              value={values.timePrizeDraw}
-              onChange={(event) => onChangeInput(event.target)}
-              style={{
-                fontSize: 16,
-                width: 60,
-                padding: "6px",
-                color: "#333",
-                borderRadius: 5,
-              }}
-            />
-          </FieldContent>
-        </ContainerTicket>
-        <ContainerImagesUpload>
-          {images.length > 0 &&
-            images.map((imageSrc, index) => (
-              <ContentUploadImage key={index}>
-                <img src={imageSrc} alt="imagem para upload" />
-                <BtnDeleteImg onClick={() => removeImage(index)}>
-                  <MdDelete />
-                </BtnDeleteImg>
-              </ContentUploadImage>
-            ))}
-        </ContainerImagesUpload>
+                <TimeField
+                  id="iptTimePrizeDrawField"
+                  name="timePrizeDraw"
+                  value={values.timePrizeDraw}
+                  onChange={(event) => onChangeInput(event.target)}
+                  style={{
+                    fontSize: 16,
+                    width: 60,
+                    padding: "6px",
+                    color: "#333",
+                    borderRadius: 5,
+                  }}
+                />
+              </FieldContent>
+            </ContainerTicket>
+            <ContainerImagesUpload>
+              {images.length > 0 &&
+                images.map((imageSrc, index) => (
+                  <ContentUploadImage key={index}>
+                    <img src={imageSrc} alt="imagem para upload" />
+                    <BtnDeleteImg onClick={() => removeImage(index)}>
+                      <MdDelete />
+                    </BtnDeleteImg>
+                  </ContentUploadImage>
+                ))}
+            </ContainerImagesUpload>
 
-        <FieldContent>
-          <label>Imagens</label>
-          <input
-            id="iptPrizeImageField"
-            name="prizeImage"
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={(evt) => onImageChange(evt.target)}
-            hidden
-            ref={fileRef}
-            //value={values.prizeImages || ""}
-          />
-          <button
-            className="btn-upload"
-            onClick={() => fileRef.current.click()}
-          >
-            <MdCloudUpload />
-          </button>
-        </FieldContent>
+            <FieldContent>
+              <label>Imagens</label>
+              <input
+                id="iptPrizeImageField"
+                name="prizeImage"
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={(evt) => onImageChange(evt.target)}
+                hidden
+                ref={fileRef}
+                //value={values.prizeImages || ""}
+              />
+              <button
+                className="btn-upload"
+                onClick={() => fileRef.current.click()}
+              >
+                <MdCloudUpload />
+              </button>
+            </FieldContent>
 
-        <FieldContent>
-          <label>Características do prêmio</label>
-          {values.prizeDescription &&
-            values.prizeDescription.length > 0 &&
-            values.prizeDescription.map((item, index) => (
-              <div key={index}>
-                <ContentInputDesc>
-                  {index > 0 && (
-                    <button
-                      className="btn-minus"
-                      onClick={() => removeFeature(item.id)}
-                    >
-                      <FaMinus />
-                    </button>
-                  )}
-                  <input
-                    id="iptPrizeDescriptionField"
-                    name="prizeDescription"
-                    type="text"
-                    autoCapitalize="words"
-                    className="input-prize-desc"
-                    //autoComplete="given-name"
-                    //maxLength={INPUT_MAX_LENGTH}
-                    //className="input-field"
-                    //aria-label={labelFirstName}
-                    //placeholder="Informe o prêmio"
-                    value={item.desc || ""}
-                    onChange={(event) => onChangeInput(event.target, item.id)}
-                  />
-                </ContentInputDesc>
-              </div>
-            ))}
-          <button className="btn-add" onClick={() => addFeature()}>
-            <FaChevronCircleDown />
-          </button>
-        </FieldContent>
-        <ContainerTicket>
-          <FieldContent>
-            <label>Valor do bilhete</label>
-            <input
-              id="iptTicketValueField"
-              name="ticketValue"
-              type="text"
-              pattern="[0-9]*"
-              className="input-date-prize-draw"
-              value={values.ticketValue || ""}
-              onChange={(event) => onChangeInput(event.target)}
-            />
-          </FieldContent>
-          <FieldContent>
-            <label>Total de bilhetes disponíveis</label>
-            <input
-              id="iptTotalTicketField"
-              name="ticketQuantity"
-              type="text"
-              //pattern='[0-9]'
-              className="input-date-prize-draw"
-              //placeholder="Total"
-              value={values.ticketQuantity || ""}
-              onChange={(event) => onChangeInput(event.target)}
-            />
-          </FieldContent>
-        </ContainerTicket>
-        <BtnConfirm>
-          <button onClick={() => savePrizeDraw()}>
-            {values.id ? "Salvar" : "Criar"}
-          </button>
-        </BtnConfirm>
+            <FieldContent>
+              <label>Características do prêmio</label>
+              {values.prizeDescription &&
+                values.prizeDescription.length > 0 &&
+                values.prizeDescription.map((item, index) => (
+                  <div key={index}>
+                    <ContentInputDesc>
+                      {index > 0 && (
+                        <button
+                          className="btn-minus"
+                          onClick={() => removeFeature(item.id)}
+                        >
+                          <FaMinus />
+                        </button>
+                      )}
+                      <input
+                        id="iptPrizeDescriptionField"
+                        name="prizeDescription"
+                        type="text"
+                        autoCapitalize="words"
+                        className="input-prize-desc"
+                        //autoComplete="given-name"
+                        //maxLength={INPUT_MAX_LENGTH}
+                        //className="input-field"
+                        //aria-label={labelFirstName}
+                        //placeholder="Informe o prêmio"
+                        value={item.desc || ""}
+                        onChange={(event) =>
+                          onChangeInput(event.target, item.id)
+                        }
+                      />
+                    </ContentInputDesc>
+                  </div>
+                ))}
+              <button className="btn-add" onClick={() => addFeature()}>
+                <FaChevronCircleDown />
+              </button>
+            </FieldContent>
+            <ContainerTicket>
+              <FieldContent>
+                <label>Valor do bilhete</label>
+                <input
+                  id="iptTicketValueField"
+                  name="ticketValue"
+                  type="text"
+                  pattern="[0-9]*"
+                  className="input-date-prize-draw"
+                  value={values.ticketValue || ""}
+                  onChange={(event) => onChangeInput(event.target)}
+                />
+              </FieldContent>
+              <FieldContent>
+                <label>Total de bilhetes disponíveis</label>
+                <input
+                  id="iptTotalTicketField"
+                  name="ticketQuantity"
+                  type="text"
+                  //pattern='[0-9]'
+                  className="input-date-prize-draw"
+                  //placeholder="Total"
+                  value={values.ticketQuantity || ""}
+                  onChange={(event) => onChangeInput(event.target)}
+                />
+              </FieldContent>
+            </ContainerTicket>
+            <BtnConfirm>
+              <button onClick={() => savePrizeDraw()}>
+                {values.id ? "Salvar" : "Criar"}
+              </button>
+            </BtnConfirm>
+          </>
+        )}
       </Content>
       <ToastContainer />
     </Container>

@@ -120,3 +120,17 @@ export const updatePrizeDraw = async (prizeDraw = {}) => {
     return error;
   }
 };
+
+//Bilhete
+export const listTicketsWhere = async (sorteioId, status = null, page = 1, limit = 2) => {
+  const payload = { sorteioId: sorteioId };
+  if (status) {
+    payload.status = status;
+  }
+  try {
+    const response = await api.get(`bilhete/listaWhere?page=${page}&limit=${limit}`, { params: payload });
+    return response;
+  } catch (error) {
+    return error;
+  }
+};

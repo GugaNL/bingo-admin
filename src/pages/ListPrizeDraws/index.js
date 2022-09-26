@@ -6,11 +6,10 @@ import { Container, Content, FiltersLegends, ContentLoader } from "./styles";
 import ContentHeader from "../../components/ContentHeader";
 import CardList from "../../components/CardList";
 import { listPrizeDraws } from "../../services/api";
-//mock
-import { sorteios } from "../../mocks";
+
 
 const ListPrizeDraws = () => {
-  const [prizeDraws, setPrizeDraws] = useState(sorteios) || [];
+  const [prizeDraws, setPrizeDraws] = useState([]);
   const [appliedFilter, setAppliedFilter] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -42,16 +41,16 @@ const ListPrizeDraws = () => {
   }, []);
 
   const filterList = (filterStatus) => {
-    if (filterStatus === appliedFilter) {
-      setPrizeDraws(sorteios);
-      setAppliedFilter('');
-    } else {
-      setAppliedFilter(filterStatus);
-      const filteredList = sorteios.filter(
-        (item) => item.status === filterStatus
-      );
-      setPrizeDraws(filteredList);
-    }
+    // if (filterStatus === appliedFilter) {
+    //   setPrizeDraws(sorteios);
+    //   setAppliedFilter('');
+    // } else {
+    //   setAppliedFilter(filterStatus);
+    //   const filteredList = sorteios.filter(
+    //     (item) => item.status === filterStatus
+    //   );
+    //   setPrizeDraws(filteredList);
+    // }
   };
 
   return (

@@ -7,6 +7,7 @@ export default {
         white: '#F8F8FF',
         gray: '#808080',
         darkGray: '#696969',
+        lightGray: '#C0C0C0',
         black: '#f7931b',
         green: '#32CD32',
         blue: '#4169E1',
