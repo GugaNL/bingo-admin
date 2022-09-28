@@ -134,3 +134,12 @@ export const listTicketsWhere = async (sorteioId, status = null, page = 1, limit
     return error;
   }
 };
+
+export const searchTicket = async (findByNumber, sorteioId) => {
+  try {
+    const response = await api.get(`bilhete/busca/${findByNumber}?sorteioId=${sorteioId}`);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};

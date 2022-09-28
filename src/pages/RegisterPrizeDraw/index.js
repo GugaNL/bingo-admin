@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TimeField from "react-simple-timefield";
 import { Puff } from "react-loader-spinner";
-import { FaChevronCircleDown, FaMinus } from "react-icons/fa";
+import { FaChevronCircleDown, FaMinus, FaArrowLeft } from "react-icons/fa";
 import { MdCloudUpload, MdDelete } from "react-icons/md";
 import {
   Container,
@@ -327,7 +327,8 @@ const RegisterPrizeDraw = () => {
         {showTickets ? (
           <>
           <BtnNumbers>
-            <button onClick={() => setShowTickets(false)}>
+            <button onClick={() => setShowTickets(false)}> 
+            <FaArrowLeft />
               Voltar
             </button>
           </BtnNumbers>

@@ -191,6 +191,9 @@ export const BtnNumbers = styled.div`
   margin-top: 40px;
 
   > button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 200px;
     padding: 13px 8px;
     border-radius: 5px;
@@ -203,6 +206,10 @@ export const BtnNumbers = styled.div`
 
     &:hover {
       opacity: 0.8;
+    }
+
+    > svg {
+      margin-right: 8px;
     }
   }
 `;

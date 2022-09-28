@@ -24,16 +24,43 @@ export const ContentLegends = styled.div`
   }
 `;
 
-export const SquareLegend = styled.div`
+export const SquareLegend = styled.button`
   display: flex;
   align-items: center;
   padding: 5%;
   color: ${(props) => props.theme.color.white};
+  font-weight: ${(props) => props.selected === true ? 'bold' : 'normal'};
   background-color: ${(props) => props.colorStatus};
   justify-content: center;
   text-align: center;
   border-radius: 2px;
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+`;
+
+export const ContentSearch = styled.div`
+  margin-top: 35px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  > input {
+    padding: 8px;
+    border-radius: 5px;
+    margin-top: 3px;
+    max-width: 80px;
+    text-align: center;
+  }
+
+  > button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 13px;
+    border-radius: 5px;
+    margin-left: 15px;
+    color: ${(props) => props.theme.color.white};
+    background-color: ${(props) => props.theme.color.orange};
+  }
 `;
 
 export const ContentNumbers = styled.div`
@@ -44,7 +71,7 @@ export const ContentNumbers = styled.div`
   padding: 0 8px;
 `;
 
-export const SquareNumber = styled.div`
+export const SquareNumber = styled.button`
   display: flex;
   align-items: center;
   padding: 5%;
