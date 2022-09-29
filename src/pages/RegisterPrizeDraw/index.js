@@ -112,7 +112,7 @@ const RegisterPrizeDraw = () => {
       });
     } else if (inputName === "ticketQuantity" || inputName === "ticketValue") {
       const reg = /^\d+\.?\d{0,2}?$/;
-      if (reg.test(inputValue)) {
+      if (reg.test(inputValue) || inputValue === "") {
         setValues({ ...values, [inputName]: inputValue });
       }
     } else {
