@@ -2,7 +2,9 @@ import styled from "styled-components";
 
 export const Container = styled.div``;
 
-export const Content = styled.div``;
+export const Content = styled.div`
+  margin-top: 30px;
+`;
 
 export const FieldContent = styled.div`
   display: flex;
@@ -10,7 +12,8 @@ export const FieldContent = styled.div`
   margin-top: 25px;
   color: ${(props) => props.theme.color.white};
 
-  > input, select {
+  > input,
+  select {
     padding: 8px;
     border-radius: 5px;
     margin-top: 3px;
@@ -94,7 +97,6 @@ export const BtnConfirm = styled.div`
     width: 300px;
     padding: 15px 10px;
     border-radius: 5px;
-    background: ${(props) => props.theme.color.success};
     color: ${(props) => props.theme.color.white};
     font-size: 16px;
     font-weight: bold;
@@ -104,6 +106,14 @@ export const BtnConfirm = styled.div`
     &:hover {
       opacity: 0.8;
     }
+  }
+
+  .button-edit {
+    background: ${(props) => props.theme.color.orange};
+  }
+
+  .button-save {
+    background: ${(props) => props.theme.color.success};
   }
 `;
 

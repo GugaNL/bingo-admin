@@ -13,21 +13,26 @@ export const api = axios.create({
 
 //Cliente
 export const createCustomer = async (customer) => {
-  const response = await api.post("cliente/novo", {
-    nome: customer.nome,
-    sobrenome: customer.sobrenome,
-    cpf: customer.cpf,
-    email: customer.email,
-    senha: customer.senha,
-    endereco: customer.endereco,
-    numeroEndereco: customer.numeroEndereco,
-    bairro: customer.bairro,
-    cidade: customer.cidade,
-    uf: customer.uf,
-    cep: customer.cep,
-  });
+  try {
+    const response = await api.post("cliente/novo", {
+      nome: customer.nome,
+      sobrenome: customer.sobrenome,
+      cpf: customer.cpf,
+      email: customer.email,
+      senha: customer.senha,
+      endereco: customer.endereco,
+      numeroEndereco: customer.numeroEndereco,
+      bairro: customer.bairro,
+      cidade: customer.cidade,
+      uf: customer.uf,
+      cep: customer.cep,
+    });
 
-  return response;
+    return response;
+  } catch (error) {
+    const { response: { data = [] } = "" } = error;
+    return data[0];
+  }
 };
 
 export const listCustomers = async () => {
@@ -35,18 +40,20 @@ export const listCustomers = async () => {
     const response = await api.get("cliente/lista");
     return response;
   } catch (error) {
-    return error;
+    const { response: { data = [] } = "" } = error;
+    return data[0];
   }
-}
+};
 
 export const findCustomer = async (id) => {
   try {
     const response = await api.get(`cliente/${id}`);
     return response;
   } catch (error) {
-    return error;
+    const { response: { data = [] } = "" } = error;
+    return data[0];
   }
-}
+};
 
 export const updateCustomer = async (customer = {}) => {
   try {
@@ -64,10 +71,10 @@ export const updateCustomer = async (customer = {}) => {
     });
     return response;
   } catch (error) {
-    return error;
+    const { response: { data = [] } = "" } = error;
+    return data[0];
   }
 };
-
 
 //Sorteio
 export const newPrizeDraw = async (prizeDraw = {}) => {
@@ -83,7 +90,8 @@ export const newPrizeDraw = async (prizeDraw = {}) => {
 
     return response;
   } catch (error) {
-    return error;
+    const { response: { data = [] } = "" } = error;
+    return data[0];
   }
 };
 
@@ -92,7 +100,8 @@ export const listPrizeDraws = async () => {
     const response = await api.get("sorteio/lista");
     return response;
   } catch (error) {
-    return error;
+    const { response: { data = [] } = "" } = error;
+    return data[0];
   }
 };
 
@@ -101,7 +110,8 @@ export const findPrizeDraw = async (id) => {
     const response = await api.get(`sorteio/${id}`);
     return response;
   } catch (error) {
-    return error;
+    const { response: { data = [] } = "" } = error;
+    return data[0];
   }
 };
 
@@ -117,29 +127,55 @@ export const updatePrizeDraw = async (prizeDraw = {}) => {
     });
     return response;
   } catch (error) {
-    return error;
+    const { response: { data = [] } = "" } = error;
+    return data[0];
   }
 };
 
 //Bilhete
-export const listTicketsWhere = async (sorteioId, status = null, page = 1, limit = 2) => {
+export const listTicketsWhere = async (
+  sorteioId,
+  status = null,
+  page = 1,
+  limit = 2
+) => {
   const payload = { sorteioId: sorteioId };
   if (status) {
     payload.status = status;
   }
   try {
-    const response = await api.get(`bilhete/listaWhere?page=${page}&limit=${limit}`, { params: payload });
+    const response = await api.get(
+      `bilhete/listaWhere?page=${page}&limit=${limit}`,
+      { params: payload }
+    );
     return response;
   } catch (error) {
-    return error;
+    const { response: { data = [] } = "" } = error;
+    return data[0];
   }
 };
 
 export const findTicket = async (findByNumber, sorteioId) => {
   try {
-    const response = await api.get(`bilhete/busca/${findByNumber}?sorteioId=${sorteioId}`);
+    const response = await api.get(
+      `bilhete/busca/${findByNumber}?sorteioId=${sorteioId}`
+    );
     return response;
   } catch (error) {
-    return error;
+    const { response: { data = [] } = "" } = error;
+    return data[0];
+  }
+};
+
+export const updateTicket = async (ticket = {}) => {
+  try {
+    const response = await api.put(`bilhete/${ticket.id}`, {
+      status: ticket.status,
+      comprador: ticket.comprador,
+    });
+    return response;
+  } catch (error) {
+    const { response: { data = [] } = "" } = error;
+    return data[0];
   }
 };

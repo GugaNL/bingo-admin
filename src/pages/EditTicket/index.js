@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  useNavigate,
+  useSearchParams,
+  createSearchParams,
+} from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,22 +16,23 @@ import {
   ContainerName,
   ContentLoader,
   BtnNumbers,
-
 } from "./styles";
 import ContentHeader from "../../components/ContentHeader";
-import { statusType, PAGE_LIST_PRIZE_DRAW } from "../../constants";
-import { findTicket, findCustomer } from "../../services/api";
+import { statusType, PAGE_NEW_PRIZE_DRAW } from "../../constants";
+import { findTicket, findCustomer, updateTicket } from "../../services/api";
 
 const EditTicket = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const ticketNumber = searchParams.get("ticketNumber") || null;
   const sorteioId = searchParams.get("sorteioId") || null;
+  const [editMode, setEditMode] = useState(false);
   const [values, setValues] = useState({
     id: null,
     number: null,
     status: null,
     buyer: null,
+    buyerId: null,
   });
   const [loading, setLoading] = useState(false);
 
@@ -75,6 +80,7 @@ const EditTicket = () => {
           number: bilhete.numero,
           status: bilhete.status,
           buyer: cliente.nome + " " + cliente.sobrenome,
+          buyerId: cliente.id,
         });
         setLoading(false);
       } else {
@@ -105,23 +111,26 @@ const EditTicket = () => {
 
     const payload = {
       id: values.id,
+      numero: values.number,
       status: values.status,
-      comprador: values.buyer,
+      sorteioId: sorteioId,
+      comprador: values.buyerId,
     };
 
     if (values.id) {
-      // const response = await updateCustomer(payload);
-      // const { data: responseUpdateCustomer = {} } = response;
-      // if (responseUpdateCustomer && responseUpdateCustomer.success) {
-      //   setLoading(false);
-      //   showToast("Cliente alterado com sucesso", "success");
-      //   setTimeout(() => {
-      //     navigate(PAGE_LIST_CUSTOMER);
-      //   }, 2500);
-      // } else {
-      //   setLoading(false);
-      //   showToast("Falha ao tentar alterar o cliente", "error");
-      // }
+      const response = await updateTicket(payload);
+      const { data: responseUpdateTicket = {} } = response;
+      if (responseUpdateTicket && responseUpdateTicket.success) {
+        setLoading(false);
+        showToast("Bilhete alterado com sucesso", "success");
+        setEditMode(false);
+      } else {
+        setLoading(false);
+        const errorMsg = response
+          ? response
+          : "Falha ao tentar alterar o bilhete";
+        showToast(errorMsg, "error");
+      }
     } else {
       // const response = await createCustomer(payload);
       // const { data: responseNewCustomer = {} } = response;
@@ -159,7 +168,16 @@ const EditTicket = () => {
         showFilters={false}
       />
       <BtnNumbers>
-        <button onClick={() => navigate(PAGE_LIST_PRIZE_DRAW)}>
+        <button
+          onClick={() =>
+            navigate({
+              pathname: PAGE_NEW_PRIZE_DRAW,
+              search: createSearchParams({
+                prizeDrawToEdit: sorteioId,
+              }).toString(),
+            })
+          }
+        >
           <FaArrowLeft />
           Voltar
         </button>
@@ -182,7 +200,13 @@ const EditTicket = () => {
           </FieldContent>
           <FieldContent>
             <label>Status</label>
-            <select className="select-state" disabled>
+            <select
+              className="select-state"
+              name="status"
+              disabled={!editMode}
+              value={values.status}
+              onChange={(evt) => onChangeInput(evt.target)}
+            >
               {statusType.length > 0 &&
                 statusType.map((item, index) => (
                   <option
@@ -222,11 +246,24 @@ const EditTicket = () => {
           </FieldContent>
         </ContainerName>
 
-        <BtnConfirm>
-          <button onClick={() => saveTicket()}>
-            {values.number ? "Salvar" : "Criar"}
-          </button>
-        </BtnConfirm>
+        {values.number && (
+          <BtnConfirm>
+            <button
+              className="button-edit"
+              onClick={() => setEditMode(!editMode)}
+            >
+              {editMode ? "Cancelar" : "Editar"}
+            </button>
+          </BtnConfirm>
+        )}
+
+        {editMode && (
+          <BtnConfirm>
+            <button className="button-save" onClick={() => saveTicket()}>
+              {values.number ? "Salvar" : "Criar"}
+            </button>
+          </BtnConfirm>
+        )}
       </Content>
       <ToastContainer />
     </Container>
