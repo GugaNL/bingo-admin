@@ -179,3 +179,13 @@ export const updateTicket = async (ticket = {}) => {
     return data[0];
   }
 };
+
+export const removeTicket = async (ticketId) => {
+  try {
+    const response = await api.delete(`bilhete/${ticketId}`);
+    return response;
+  } catch (error) {
+    const { response: { data = [] } = "" } = error;
+    return data[0];
+  }
+}

@@ -18,8 +18,14 @@ import {
   BtnNumbers,
 } from "./styles";
 import ContentHeader from "../../components/ContentHeader";
+import ModalQuestion from "../../components/ModalQuestion";
 import { statusType, PAGE_NEW_PRIZE_DRAW } from "../../constants";
-import { findTicket, findCustomer, updateTicket } from "../../services/api";
+import {
+  findTicket,
+  findCustomer,
+  updateTicket,
+  removeTicket,
+} from "../../services/api";
 
 const EditTicket = () => {
   const navigate = useNavigate();
@@ -27,10 +33,11 @@ const EditTicket = () => {
   const ticketNumber = searchParams.get("ticketNumber") || null;
   const sorteioId = searchParams.get("sorteioId") || null;
   const [editMode, setEditMode] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [values, setValues] = useState({
     id: null,
     number: null,
-    status: null,
+    status: "",
     buyer: null,
     buyerId: null,
   });
@@ -107,48 +114,88 @@ const EditTicket = () => {
   };
 
   const saveTicket = async () => {
-    setLoading(true);
+    if (values.status === "livre") {
+      setShowModal(true);
+    } else {
+      setLoading(true);
 
-    const payload = {
-      id: values.id,
-      numero: values.number,
-      status: values.status,
-      sorteioId: sorteioId,
-      comprador: values.buyerId,
-    };
+      const payload = {
+        id: values.id,
+        numero: values.number,
+        status: values.status,
+        sorteioId: sorteioId,
+        comprador: values.buyerId,
+      };
 
-    if (values.id) {
-      const response = await updateTicket(payload);
-      const { data: responseUpdateTicket = {} } = response;
-      if (responseUpdateTicket && responseUpdateTicket.success) {
-        setLoading(false);
-        showToast("Bilhete alterado com sucesso", "success");
-        setEditMode(false);
+      if (values.id) {
+        const response = await updateTicket(payload);
+        const { data: responseUpdateTicket = {} } = response;
+        if (responseUpdateTicket && responseUpdateTicket.success) {
+          setLoading(false);
+          showToast("Bilhete alterado com sucesso", "success");
+          setEditMode(false);
+        } else {
+          setLoading(false);
+          const errorMsg = response
+            ? response
+            : "Falha ao tentar alterar o bilhete";
+          showToast(errorMsg, "error");
+        }
       } else {
+        // const response = await createCustomer(payload);
+        // const { data: responseNewCustomer = {} } = response;
+        // if (responseNewCustomer && responseNewCustomer.success) {
+        //   setLoading(false);
+        //   showToast("Cliente criado com sucesso", "success");
+        //   setTimeout(() => {
+        //     navigate(PAGE_LIST_CUSTOMER);
+        //   }, 2500);
+        // } else {
+        //   setLoading(false);
+        //   showToast("Falha ao tentar criar o cliente", "error");
+        // }
+      }
+    }
+  };
+
+  const deleteTicket = async () => {
+    if (values.id) {
+      setLoading(true);
+
+      const response = await removeTicket(values.id);
+      const { data: responseRemoveTicket = {} } = response;
+
+      if (responseRemoveTicket && responseRemoveTicket.success) {
+        setShowModal(false);
         setLoading(false);
+        showToast("Bilhete removido com sucesso", "success");
+        setTimeout(() => {
+          navigate({
+            pathname: PAGE_NEW_PRIZE_DRAW,
+            search: createSearchParams({ prizeDrawToEdit: sorteioId }).toString(),
+          })
+        }, 2500);
+      } else {
+        setShowModal(false);
         const errorMsg = response
           ? response
-          : "Falha ao tentar alterar o bilhete";
+          : "Falha ao tentar remover o bilhete";
         showToast(errorMsg, "error");
       }
-    } else {
-      // const response = await createCustomer(payload);
-      // const { data: responseNewCustomer = {} } = response;
-      // if (responseNewCustomer && responseNewCustomer.success) {
-      //   setLoading(false);
-      //   showToast("Cliente criado com sucesso", "success");
-      //   setTimeout(() => {
-      //     navigate(PAGE_LIST_CUSTOMER);
-      //   }, 2500);
-      // } else {
-      //   setLoading(false);
-      //   showToast("Falha ao tentar criar o cliente", "error");
-      // }
     }
   };
 
   return (
     <Container>
+      {showModal && (
+        <ModalQuestion
+          title="Aviso - Remoção de bilhete"
+          description="O bilhete será excluído, tem certeza que deseja realizar a operação?"
+          textBtnConfirm="Confirmar"
+          handleConfirm={() => deleteTicket()}
+          handleCloseModal={() => setShowModal(false)}
+        />
+      )}
       {loading && (
         <ContentLoader>
           <Puff
@@ -212,7 +259,7 @@ const EditTicket = () => {
                   <option
                     key={index}
                     value={item.name}
-                    selected={item.name === values.status}
+                    //selected={item.name === values.status}
                   >
                     {item.title}
                   </option>

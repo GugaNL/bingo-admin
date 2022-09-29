@@ -69,7 +69,7 @@ const ListTickets = (props) => {
 
     if (responseListTickets && responseListTickets.success) {
       const { bilhetes = [] } = responseListTickets;
-      //bilhetes.sort((a, b) => a.numero - b.numero);
+      bilhetes.sort((a, b) => a.numero - b.numero);
       mountArrayTotalTickets(bilhetes);
       countStatus(bilhetes);
       setLoading(false);
