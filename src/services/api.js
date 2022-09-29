@@ -135,7 +135,7 @@ export const listTicketsWhere = async (sorteioId, status = null, page = 1, limit
   }
 };
 
-export const searchTicket = async (findByNumber, sorteioId) => {
+export const findTicket = async (findByNumber, sorteioId) => {
   try {
     const response = await api.get(`bilhete/busca/${findByNumber}?sorteioId=${sorteioId}`);
     return response;

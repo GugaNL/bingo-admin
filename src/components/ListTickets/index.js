@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, createSearchParams } from "react-router-dom";
 import { FaSearch, FaTrash } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -11,10 +12,12 @@ import {
   ContentNumbers,
   SquareNumber,
 } from "./styles";
-import { listTicketsWhere, searchTicket } from "../../services/api";
+import { PAGE_EDIT_TICKET } from "../../constants";
+import { listTicketsWhere } from "../../services/api";
 
 const ListTickets = (props) => {
   const { sorteioId = 0, totalTickets = 0 } = props;
+  const navigate = useNavigate();
   const [tickets, setTickets] = useState([]);
   const [initialTickets, setInitialTickets] = useState([]);
   const [filteredOption, setFilteredOption] = useState("");
@@ -158,7 +161,8 @@ const ListTickets = (props) => {
 
   const fetchSearchNumber = async () => {
     if (searchTerm) {
-      const findNumber = tickets.find(item => item.numero === parseInt(searchTerm)) || {};
+      const findNumber =
+        tickets.find((item) => item.numero === parseInt(searchTerm)) || {};
       setTickets([findNumber]);
       setActiveSearch(true);
     }
@@ -187,6 +191,18 @@ const ListTickets = (props) => {
     setActiveSearch(false);
     setSearchTerm("");
     setTickets(initialTickets);
+  };
+
+  const goToTicketPage = (ticketItem) => {
+    if (ticketItem.status !== "livre") {
+      navigate({
+        pathname: PAGE_EDIT_TICKET,
+        search: createSearchParams({
+          ticketNumber: ticketItem.numero,
+          sorteioId: sorteioId,
+        }).toString(),
+      });
+    }
   };
 
   return (
@@ -264,7 +280,11 @@ const ListTickets = (props) => {
             if (item.numero === 0) return null;
 
             return (
-              <SquareNumber colorStatus={statusColor} key={index}>
+              <SquareNumber
+                colorStatus={statusColor}
+                key={index}
+                onClick={() => goToTicketPage(item)}
+              >
                 {item.numero}
               </SquareNumber>
             );

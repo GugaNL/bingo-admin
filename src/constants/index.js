@@ -3,6 +3,7 @@ export const PAGE_LIST_PRIZE_DRAW = '/sweepstakes';
 export const PAGE_NEW_PRIZE_DRAW = '/register-sweepstake';
 export const PAGE_LIST_CUSTOMER = '/lista-clientes';
 export const PAGE_NEW_CUSTOMER = '/cliente';
+export const PAGE_EDIT_TICKET = '/ticket';
 
 export const months = [
   { name: "Janeiro", value: 1 },
@@ -52,6 +53,13 @@ export const states = [
   { name: 'SP' },
   { name: 'SE' },
   { name: 'TO' },
+]
+
+export const statusType = [
+  { name: "livre", title: "Livre"},
+  { name: "comprado", title: "Comprado"},
+  { name: "reservado", title: "Reservado"},
+  { name: "cancelado", title: "Cancelado"}
 ]
 
 export const ImageTypeRegex = /image\/(png|jpg|jpeg)/gm;
