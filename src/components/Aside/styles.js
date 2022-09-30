@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 
 export const Container = styled.div`
   grid-area: AS;
-  background-color: ${props => props.theme.color.darkBlue};
+  background-color: ${(props) => props.theme.color.darkBlue};
   //background-image: linear-gradient(160deg, #252a48 0%, #6873b2 100%);
   border-right: 1px solid ${(props) => props.theme.color.gray};
   padding-left: 20px;
@@ -22,7 +22,7 @@ export const Container = styled.div`
       `}
   }
 
-  @media(max-width: 380px) {
+  @media (max-width: 380px) {
     padding-right: 8px;
   }
 `;
@@ -89,5 +89,25 @@ export const ToogleMenu = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+`;
+
+export const MenuItemButton = styled.button`
+  font-size: 16px;
+  color: ${(props) => props.theme.color.white};
+  border: none;
+  background: none;
+  margin: 7px 0;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.3s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  > svg {
+    font-size: 18px;
+    margin-right: 5px;
   }
 `;

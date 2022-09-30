@@ -26,9 +26,9 @@ const AuthProvider = ({ children }) => {
   };
 
   const signOut = () => {
-    localStorage.removeItem("@minha-carteira:logged");
-    localStorage.removeItem("@minha-carteira:user");
-    localStorage.removeItem("@minha-carteira:token");
+    localStorage.removeItem("@sorteio-admin:logged");
+    localStorage.removeItem("@sorteio-admin:user");
+    localStorage.removeItem("@sorteio-admin:token");
     setLogged(false);
   };
 

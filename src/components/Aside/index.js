@@ -6,6 +6,7 @@ import {
   Title,
   MenuContainer,
   MenuItemLink,
+  MenuItemButton,
   ToogleMenu,
 } from "./styles";
 import logo from "../../assets/logo.svg";
@@ -18,8 +19,10 @@ import {
   FaRegLifeRing,
 } from "react-icons/fa";
 import { MdClose, MdMenu } from "react-icons/md";
+import { useAuth } from "../../hooks/auth";
 
-const Aside = (props) => {
+const Aside = () => {
+  const { signOut } = useAuth();
   const [showToggleMenu, setShowToggleMenu] = useState(false);
 
   const handleToggleMenu = () => {
@@ -33,8 +36,6 @@ const Aside = (props) => {
       return <FaWpforms />;
     } else if (itemIcon === "FaAddressBook") {
       return <FaAddressBook />;
-    } else if (itemIcon === "FaSignOutAlt") {
-      return <FaSignOutAlt />;
     }
     return <FaRegLifeRing />;
   };
@@ -57,6 +58,10 @@ const Aside = (props) => {
               {item.name}
             </MenuItemLink>
           ))}
+        <MenuItemButton onClick={signOut}>
+          <FaSignOutAlt />
+          Sair
+        </MenuItemButton>
       </MenuContainer>
     </Container>
   );
