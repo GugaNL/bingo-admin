@@ -1,9 +1,9 @@
 export default {
     title: 'default',
     color: {
-        primary: '',
-        secondary: '',
-        terciary: '',
+        primary: '#1B1F38',
+        secondary: '#252A48',
+        tertiary: '#313862',
         white: '#F8F8FF',
         gray: '#808080',
         darkGray: '#696969',

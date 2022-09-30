@@ -189,3 +189,17 @@ export const removeTicket = async (ticketId) => {
     return data[0];
   }
 }
+
+//Usuário
+export const loginUser = async (email, password) => {
+  try {
+    const response = await api.post("usuario/login", {
+      login: email,
+      senha: password
+    });
+    return response;
+  } catch (error) {
+    const { response: { data = [] } = "" } = error;
+    return data[0];
+  }
+};

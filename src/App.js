@@ -1,14 +1,17 @@
 import React from "react";
 import { ThemeProvider } from "styled-components";
 import GlobalStyles from "./styles/GlobalStyles";
-import defaultTheme from './theme';
-import Routes from './routes';
+import defaultTheme from "./theme";
+import Routes from "./routes";
+import { AuthProvider } from "./hooks/auth";
 
 const App = () => {
   return (
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyles />
-      <Routes />
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
     </ThemeProvider>
   );
 };

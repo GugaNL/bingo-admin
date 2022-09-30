@@ -4,6 +4,7 @@ export const PAGE_NEW_PRIZE_DRAW = '/register-sweepstake';
 export const PAGE_LIST_CUSTOMER = '/lista-clientes';
 export const PAGE_NEW_CUSTOMER = '/cliente';
 export const PAGE_EDIT_TICKET = '/ticket';
+export const PAGE_LOGIN = '/';
 
 export const months = [
   { name: "Janeiro", value: 1 },
