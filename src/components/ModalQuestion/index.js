@@ -17,6 +17,7 @@ const ModalQuestion = (props) => {
     title = "",
     description = "",
     textBtnConfirm = "Ok",
+    showCancelBtn = true,
   } = props;
 
   return (
@@ -32,12 +33,14 @@ const ModalQuestion = (props) => {
             <button className="button-confirm" onClick={() => handleConfirm()}>
               {textBtnConfirm}
             </button>
-            <button
-              className="button-cancel"
-              onClick={() => handleCloseModal()}
-            >
-              Cancelar
-            </button>
+            {showCancelBtn && (
+              <button
+                className="button-cancel"
+                onClick={() => handleCloseModal()}
+              >
+                Cancelar
+              </button>
+            )}
           </ContentButtons>
         </Footer>
       </Content>

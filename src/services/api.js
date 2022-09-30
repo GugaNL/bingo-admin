@@ -11,6 +11,8 @@ export const api = axios.create({
   baseURL,
 });
 
+const token = localStorage.getItem("token");
+
 //Cliente
 export const createCustomer = async (customer) => {
   try {
@@ -37,10 +39,17 @@ export const createCustomer = async (customer) => {
 
 export const listCustomers = async () => {
   try {
-    const response = await api.get("cliente/lista");
+    const response = await api.get("cliente/lista", {
+      headers: {
+        Authorization: `token ${token}`,
+      },
+    });
     return response;
   } catch (error) {
-    const { response: { data = [] } = "" } = error;
+    const { response: { data = [], status = "" } = "" } = error;
+    if (status === 401) {
+      return status;
+    }
     return data[0];
   }
 };
@@ -188,14 +197,14 @@ export const removeTicket = async (ticketId) => {
     const { response: { data = [] } = "" } = error;
     return data[0];
   }
-}
+};
 
 //Usuário
 export const loginUser = async (email, password) => {
   try {
     const response = await api.post("usuario/login", {
       login: email,
-      senha: password
+      senha: password,
     });
     return response;
   } catch (error) {
