@@ -26,6 +26,10 @@ export const Header = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
+  > svg {
+    cursor: pointer;
+  }
 `;
 
 export const Title = styled.h3`

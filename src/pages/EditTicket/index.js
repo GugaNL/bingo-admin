@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   useNavigate,
   useSearchParams,
@@ -17,6 +17,7 @@ import {
   ContentLoader,
   BtnNumbers,
 } from "./styles";
+import {CheckAuthContext} from "../../contexts";
 import ContentHeader from "../../components/ContentHeader";
 import ModalQuestion from "../../components/ModalQuestion";
 import { statusType, PAGE_NEW_PRIZE_DRAW } from "../../constants";
@@ -28,6 +29,7 @@ import {
 } from "../../services/api";
 
 const EditTicket = () => {
+  const { setIsLogged } = useContext(CheckAuthContext);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const ticketNumber = searchParams.get("ticketNumber") || null;
@@ -136,10 +138,14 @@ const EditTicket = () => {
           setEditMode(false);
         } else {
           setLoading(false);
-          const errorMsg = response
+          if (response === 401) {
+            setIsLogged();
+          } else{
+            const errorMsg = response
             ? response
             : "Falha ao tentar alterar o bilhete";
           showToast(errorMsg, "error");
+          }
         }
       } else {
         // const response = await createCustomer(payload);
@@ -177,10 +183,14 @@ const EditTicket = () => {
         }, 2500);
       } else {
         setShowModal(false);
-        const errorMsg = response
+        if (response === 401) {
+          setIsLogged();
+        } else {
+          const errorMsg = response
           ? response
           : "Falha ao tentar remover o bilhete";
         showToast(errorMsg, "error");
+        }
       }
     }
   };

@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Puff } from "react-loader-spinner";
 import { Container, Content, ContentLoader } from "./styles";
 import ContentHeader from "../../components/ContentHeader";
 import CardListCustomer from "../../components/CardListCustomer";
-import { useAuth } from "../../hooks/auth";
 import { listCustomers } from "../../services/api";
+import {CheckAuthContext} from "../../contexts";
 
 const ListCustomers = () => {
-  const { signOut } = useAuth();
+  const { setIsLogged } = useContext(CheckAuthContext);
   const [customers, setCustomers] = useState([]);
   const [appliedFilter, setAppliedFilter] = useState("");
   const [loading, setLoading] = useState(true);
@@ -25,8 +25,7 @@ const ListCustomers = () => {
     } else {
       setLoading(false);
       if (response === 401) {
-        //Colocar o modal nformando falha na autenticação // Criar um context pra colocar o modal
-        signOut();
+        setIsLogged();
       } else {
         toast.error("Falha ao listar os clientes", {
           position: "top-right",

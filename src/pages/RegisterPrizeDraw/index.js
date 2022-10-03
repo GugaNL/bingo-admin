@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import InputMask from "react-input-mask";
 import { ToastContainer, toast } from "react-toastify";
@@ -20,6 +20,7 @@ import {
   ContainerTicket,
   ContentLoader,
 } from "./styles";
+import {CheckAuthContext} from "../../contexts";
 import ContentHeader from "../../components/ContentHeader";
 import ListTickets from "../../components/ListTickets";
 import { PAGE_LIST_PRIZE_DRAW, ImageTypeRegex } from "../../constants";
@@ -30,6 +31,7 @@ import {
 } from "../../services/api";
 
 const RegisterPrizeDraw = () => {
+  const { setIsLogged } = useContext(CheckAuthContext);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const prizeDrawToEdit = searchParams.get("prizeDrawToEdit") || null;
@@ -245,10 +247,14 @@ const RegisterPrizeDraw = () => {
         }, 2500);
       } else {
         setLoading(false);
-        showToast("Falha ao tentar alterar o sorteio", "error");
+        if (response === 401) {
+          setIsLogged();
+        } else {
+          showToast("Falha ao tentar alterar o sorteio", "error");
+        }
       }
     } else {
-      const response = await newPrizeDraw(payload);
+      const response = await newPrizeDraw(payload); 
       const { data: responseNewPrizeDraw = {} } = response;
 
       if (responseNewPrizeDraw && responseNewPrizeDraw.success) {
@@ -259,7 +265,11 @@ const RegisterPrizeDraw = () => {
         }, 2500);
       } else {
         setLoading(false);
-        showToast("Falha ao tentar criar o sorteio", "error");
+        if (response === 401) {
+          setIsLogged();
+        } else {
+          showToast("Falha ao tentar criar o sorteio", "error");
+        }
       }
     }
   };

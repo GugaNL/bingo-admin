@@ -11,7 +11,7 @@ export const api = axios.create({
   baseURL,
 });
 
-const token = localStorage.getItem("token");
+const token = localStorage.getItem("@sorteio-admin:token");
 
 //Cliente
 export const createCustomer = async (customer) => {
@@ -41,7 +41,7 @@ export const listCustomers = async () => {
   try {
     const response = await api.get("cliente/lista", {
       headers: {
-        Authorization: `token ${token}`,
+        token,
       },
     });
     return response;
@@ -88,18 +88,29 @@ export const updateCustomer = async (customer = {}) => {
 //Sorteio
 export const newPrizeDraw = async (prizeDraw = {}) => {
   try {
-    const response = await api.post("sorteio/novo", {
-      titulo: prizeDraw.titulo || "",
-      descricao: prizeDraw.descricao || "",
-      data: prizeDraw.data,
-      premio: prizeDraw.premio || "",
-      totalBilhetes: prizeDraw.totalBilhetes || 0,
-      valorBilhete: prizeDraw.valorBilhete || 0,
-    });
+    const response = await api.post(
+      "sorteio/novo",
+      {
+        titulo: prizeDraw.titulo || "",
+        descricao: prizeDraw.descricao || "",
+        data: prizeDraw.data,
+        premio: prizeDraw.premio || "",
+        totalBilhetes: prizeDraw.totalBilhetes || 0,
+        valorBilhete: prizeDraw.valorBilhete || 0,
+      },
+      {
+        headers: {
+          token,
+        },
+      }
+    );
 
     return response;
   } catch (error) {
-    const { response: { data = [] } = "" } = error;
+    const { response: { data = [], status = "" } = "" } = error;
+    if (status === 401) {
+      return status;
+    }
     return data[0];
   }
 };
@@ -126,17 +137,28 @@ export const findPrizeDraw = async (id) => {
 
 export const updatePrizeDraw = async (prizeDraw = {}) => {
   try {
-    const response = await api.put(`sorteio/${prizeDraw.id}`, {
-      titulo: prizeDraw.titulo || "",
-      descricao: prizeDraw.descricao || "",
-      data: prizeDraw.data,
-      premio: prizeDraw.premio || "",
-      totalBilhetes: prizeDraw.totalBilhetes || 0,
-      valorBilhete: prizeDraw.valorBilhete || 0,
-    });
+    const response = await api.put(
+      `sorteio/${prizeDraw.id}`,
+      {
+        titulo: prizeDraw.titulo || "",
+        descricao: prizeDraw.descricao || "",
+        data: prizeDraw.data,
+        premio: prizeDraw.premio || "",
+        totalBilhetes: prizeDraw.totalBilhetes || 0,
+        valorBilhete: prizeDraw.valorBilhete || 0,
+      },
+      {
+        headers: {
+          token,
+        },
+      }
+    );
     return response;
   } catch (error) {
-    const { response: { data = [] } = "" } = error;
+    const { response: { data = [], status = "" } = "" } = error;
+    if (status === 401) {
+      return status;
+    }
     return data[0];
   }
 };
@@ -178,23 +200,41 @@ export const findTicket = async (findByNumber, sorteioId) => {
 
 export const updateTicket = async (ticket = {}) => {
   try {
-    const response = await api.put(`bilhete/${ticket.id}`, {
-      status: ticket.status,
-      comprador: ticket.comprador,
-    });
+    const response = await api.put(
+      `bilhete/${ticket.id}`,
+      {
+        status: ticket.status,
+        comprador: ticket.comprador,
+      },
+      {
+        headers: {
+          token,
+        },
+      }
+    );
     return response;
   } catch (error) {
-    const { response: { data = [] } = "" } = error;
+    const { response: { data = [], status = "" } = "" } = error;
+    if (status === 401) {
+      return status;
+    }
     return data[0];
   }
 };
 
 export const removeTicket = async (ticketId) => {
   try {
-    const response = await api.delete(`bilhete/${ticketId}`);
+    const response = await api.delete(`bilhete/${ticketId}`, {
+      headers: {
+        token,
+      },
+    });
     return response;
   } catch (error) {
-    const { response: { data = [] } = "" } = error;
+    const { response: { data = [], status = "" } = "" } = error;
+    if (status === 401) {
+      return status;
+    }
     return data[0];
   }
 };
