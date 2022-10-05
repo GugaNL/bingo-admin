@@ -52,6 +52,30 @@ const RegisterPrizeDraw = () => {
   const [showTickets, setShowTickets] = useState(false);
   const fileRef = useRef();
 
+  const showToast = (message, type) => {
+    if (type === "success") {
+      toast.success(message, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+      });
+    } else {
+      toast.error(message, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+      });
+    }
+  };
+
   const loadPrizeDescription = (prizeDescription) => {
     const arrayDesc = prizeDescription?.split(";") || [];
     const formattedArrayDesc =
@@ -188,30 +212,6 @@ const RegisterPrizeDraw = () => {
     return stringDesc;
   };
 
-  const showToast = (message, type) => {
-    if (type === "success") {
-      toast.success(message, {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: false,
-        progress: undefined,
-      });
-    } else {
-      toast.error(message, {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: false,
-        progress: undefined,
-      });
-    }
-  };
-
   const savePrizeDraw = async () => {
     setLoading(true);
     let formattedPrizeDesc = "";
@@ -233,6 +233,7 @@ const RegisterPrizeDraw = () => {
       premio: values.prize,
       totalBilhetes: values.ticketQuantity,
       valorBilhete: values.ticketValue,
+      sorteioImage: values.prizeImages
     };
 
     if (values.id) {
@@ -274,37 +275,46 @@ const RegisterPrizeDraw = () => {
     }
   };
 
+  // useEffect(() => {
+  //   const images = [];
+  //   const fileReaders = [];
+  //   let isCancel = false;
+
+  //   if (imageFiles.length > 0) {
+  //     imageFiles.forEach((file) => {
+  //       const fileReader = new FileReader();
+  //       fileReaders.push(fileReader);
+  //       fileReader.onload = (e) => {
+  //         const { result } = e.target;
+  //         if (result) {
+  //           images.push(result);
+  //         }
+  //         if (images.length === imageFiles.length && !isCancel) {
+  //           setImages([...images]);
+  //         }
+  //       };
+  //       fileReader.readAsDataURL(file);
+  //     });
+  //   }
+
+  //   return () => {
+  //     isCancel = true;
+  //     fileReaders.forEach((fileReader) => {
+  //       if (fileReader.readyState === 1) {
+  //         fileReader.abort();
+  //       }
+  //     });
+  //   };
+  // }, [imageFiles, images]);
+
   useEffect(() => {
-    const images = [];
-    const fileReaders = [];
-    let isCancel = false;
+    if (imageFiles.length < 1) return;
 
-    if (imageFiles.length > 0) {
-      imageFiles.forEach((file) => {
-        const fileReader = new FileReader();
-        fileReaders.push(fileReader);
-        fileReader.onload = (e) => {
-          const { result } = e.target;
-          if (result) {
-            images.push(result);
-          }
-          if (images.length === imageFiles.length && !isCancel) {
-            setImages([...images]);
-          }
-        };
-        fileReader.readAsDataURL(file);
-      });
-    }
+    const newImageUrls = [];
+    imageFiles.forEach(itemImg => newImageUrls.push(URL.createObjectURL(itemImg)));
+    setImages(newImageUrls);
 
-    return () => {
-      isCancel = true;
-      fileReaders.forEach((fileReader) => {
-        if (fileReader.readyState === 1) {
-          fileReader.abort();
-        }
-      });
-    };
-  }, [imageFiles, images]);
+  }, [imageFiles]);
 
   return (
     <Container>
@@ -396,15 +406,6 @@ const RegisterPrizeDraw = () => {
               </FieldContent>
               <FieldContent>
                 <label>Horário do sorteio</label>
-                {/* <input
-              id="iptTimePrizeDrawField"
-              name="timePrizeDraw"
-              type="time"
-              //pattern="[0-9]{2}:[0-9]{2}"
-              className="input-date-prize-draw"
-              value={values.timePrizeDraw}
-              onChange={(event) => onChangeInput(event.target)}
-            /> */}
                 <TimeField
                   id="iptTimePrizeDrawField"
                   name="timePrizeDraw"
