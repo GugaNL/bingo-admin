@@ -87,23 +87,29 @@ export const updateCustomer = async (customer = {}) => {
 
 //Sorteio
 export const newPrizeDraw = async (prizeDraw = {}) => {
+  const { sorteioImages = [] } = prizeDraw;
+  const formData = new FormData();
+
+  formData.append("titulo", prizeDraw.titulo);
+  formData.append("descricao", prizeDraw.descricao);
+  formData.append("data", prizeDraw.data);
+  formData.append("premio", prizeDraw.premio);
+  formData.append("totalBilhetes", prizeDraw.totalBilhetes);
+  formData.append("valorBilhete", prizeDraw.valorBilhete);
+
+  if (sorteioImages.length > 0) {
+    for (let i = 0; i < sorteioImages.length; i++) {
+      formData.append("sorteioImage", sorteioImages[i]);
+    }
+  }
+
   try {
-    const response = await api.post(
-      "sorteio/novo",
-      {
-        titulo: prizeDraw.titulo || "",
-        descricao: prizeDraw.descricao || "",
-        data: prizeDraw.data,
-        premio: prizeDraw.premio || "",
-        totalBilhetes: prizeDraw.totalBilhetes || 0,
-        valorBilhete: prizeDraw.valorBilhete || 0,
+    const response = await api.post("sorteio/novo", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        token,
       },
-      {
-        headers: {
-          token,
-        },
-      }
-    );
+    });
 
     return response;
   } catch (error) {

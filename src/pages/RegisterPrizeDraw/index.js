@@ -173,18 +173,6 @@ const RegisterPrizeDraw = () => {
     });
   };
 
-  // useEffect(() => {
-  //   if (images.length < 1) return;
-  //   const newImagesURLs = [];
-  //   images.forEach(image => newImagesURLs.push(URL.createObjectURL(image)));
-  //   setImagesURLs(newImagesURLs);
-  // }, [images])
-
-  // const onImageChange = (evt) => {
-  //   setImages([...images, evt?.files]);
-  //   setImagesURLs(URL.createObjectURL(evt?.files[0]));
-  // };
-
   const onImageChange = (evt) => {
     const { files = [] } = evt;
     if (files.length > 0 && files[0].type.match(ImageTypeRegex)) {
@@ -233,7 +221,7 @@ const RegisterPrizeDraw = () => {
       premio: values.prize,
       totalBilhetes: values.ticketQuantity,
       valorBilhete: values.ticketValue,
-      sorteioImage: values.prizeImages
+      sorteioImages: imageFiles
     };
 
     if (values.id) {
@@ -444,7 +432,6 @@ const RegisterPrizeDraw = () => {
                 onChange={(evt) => onImageChange(evt.target)}
                 hidden
                 ref={fileRef}
-                //value={values.prizeImages || ""}
               />
               <button
                 className="btn-upload"
