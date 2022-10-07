@@ -142,23 +142,30 @@ export const findPrizeDraw = async (id) => {
 };
 
 export const updatePrizeDraw = async (prizeDraw = {}) => {
+  const { sorteioImages = [] } = prizeDraw;
+  const formData = new FormData();
+
+  formData.append("titulo", prizeDraw.titulo);
+  formData.append("descricao", prizeDraw.descricao);
+  formData.append("data", prizeDraw.data);
+  formData.append("premio", prizeDraw.premio);
+  formData.append("totalBilhetes", prizeDraw.totalBilhetes);
+  formData.append("valorBilhete", prizeDraw.valorBilhete);
+
+  if (sorteioImages.length > 0) {
+    for (let i = 0; i < sorteioImages.length; i++) {
+      formData.append("sorteioImage", sorteioImages[i]);
+    }
+  }
+
   try {
-    const response = await api.put(
-      `sorteio/${prizeDraw.id}`,
-      {
-        titulo: prizeDraw.titulo || "",
-        descricao: prizeDraw.descricao || "",
-        data: prizeDraw.data,
-        premio: prizeDraw.premio || "",
-        totalBilhetes: prizeDraw.totalBilhetes || 0,
-        valorBilhete: prizeDraw.valorBilhete || 0,
+    const response = await api.put(`sorteio/${prizeDraw.id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        token,
       },
-      {
-        headers: {
-          token,
-        },
-      }
-    );
+    });
+
     return response;
   } catch (error) {
     const { response: { data = [], status = "" } = "" } = error;
