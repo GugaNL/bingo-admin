@@ -1,3 +1,7 @@
+//Server
+export const baseURL = "http://localhost:5000/api/";
+//const baseURL = "https://sorteio-nodejs.herokuapp.com/api/";
+
 //Pages
 export const PAGE_LIST_PRIZE_DRAW = '/sweepstakes';
 export const PAGE_NEW_PRIZE_DRAW = '/register-sweepstake';

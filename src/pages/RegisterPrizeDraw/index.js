@@ -23,7 +23,7 @@ import {
 import {CheckAuthContext} from "../../contexts";
 import ContentHeader from "../../components/ContentHeader";
 import ListTickets from "../../components/ListTickets";
-import { PAGE_LIST_PRIZE_DRAW, ImageTypeRegex } from "../../constants";
+import { PAGE_LIST_PRIZE_DRAW, ImageTypeRegex, baseURL } from "../../constants";
 import {
   newPrizeDraw,
   findPrizeDraw,
@@ -86,10 +86,11 @@ const RegisterPrizeDraw = () => {
   };
 
   const loadPrizeDraw = async () => {
+    setLoading(true);
     const response = await findPrizeDraw(prizeDrawToEdit);
     const { data: responseFindPrizeDraw = {} } = response;
     if (responseFindPrizeDraw && responseFindPrizeDraw.success) {
-      const { sorteio = {} } = responseFindPrizeDraw;
+      const { sorteio = {}, imagens = [] } = responseFindPrizeDraw;
       let prizeDate = "";
       let prizeTime = "";
 
@@ -103,6 +104,10 @@ const RegisterPrizeDraw = () => {
         prizeTime = sorteio.data.split(" ")[1];
       }
 
+      const formattedImages = imagens.map(el => {
+        return baseURL + el.path;
+      });
+
       setValues({
         id: sorteio.id,
         title: sorteio.titulo,
@@ -113,6 +118,10 @@ const RegisterPrizeDraw = () => {
         ticketValue: sorteio.valorBilhete,
         ticketQuantity: sorteio.totalBilhetes,
       });
+      setImages(formattedImages);
+      setLoading(false);
+    } else {
+      setLoading(false);
     }
   };
 
@@ -410,7 +419,7 @@ const RegisterPrizeDraw = () => {
               </FieldContent>
             </ContainerTicket>
             <ContainerImagesUpload>
-              {images.length > 0 &&
+              {images.length > 0 && 
                 images.map((imageSrc, index) => (
                   <ContentUploadImage key={index}>
                     <img src={imageSrc} alt="imagem para upload" />

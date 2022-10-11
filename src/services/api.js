@@ -1,7 +1,5 @@
 import axios from "axios";
-
-//const baseURL = "https://sorteio-nodejs.herokuapp.com/api/";
-const baseURL = "http://localhost:5000/api/";
+import { baseURL } from "../constants";
 
 // var config = {
 //   headers: { "Access-Control-Allow-Origin": "*" },
