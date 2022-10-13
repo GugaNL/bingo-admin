@@ -174,6 +174,16 @@ export const updatePrizeDraw = async (prizeDraw = {}) => {
   }
 };
 
+export const updateImages = async (images = [], sorteioId) => {
+  const response = await api.post(`imagem/${sorteioId}`, images, {
+    headers: {
+      token,
+    },
+  });
+
+  return response;
+};
+
 //Bilhete
 export const listTicketsWhere = async (
   sorteioId,

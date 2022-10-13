@@ -20,7 +20,7 @@ import {
   ContainerTicket,
   ContentLoader,
 } from "./styles";
-import {CheckAuthContext} from "../../contexts";
+import { CheckAuthContext } from "../../contexts";
 import ContentHeader from "../../components/ContentHeader";
 import ListTickets from "../../components/ListTickets";
 import { PAGE_LIST_PRIZE_DRAW, ImageTypeRegex, baseURL } from "../../constants";
@@ -28,6 +28,7 @@ import {
   newPrizeDraw,
   findPrizeDraw,
   updatePrizeDraw,
+  updateImages,
 } from "../../services/api";
 
 const RegisterPrizeDraw = () => {
@@ -104,8 +105,8 @@ const RegisterPrizeDraw = () => {
         prizeTime = sorteio.data.split(" ")[1];
       }
 
-      const formattedImages = imagens.map(el => {
-        return baseURL + el.path;
+      const formattedImages = imagens.map((el) => {
+        return el.path;
       });
 
       setValues({
@@ -230,11 +231,13 @@ const RegisterPrizeDraw = () => {
       premio: values.prize,
       totalBilhetes: values.ticketQuantity,
       valorBilhete: values.ticketValue,
-      sorteioImages: imageFiles
+      sorteioImages: imageFiles,
     };
 
     if (values.id) {
-      const response = await updatePrizeDraw(payload);
+      await updateImages(images, values.id); //first check if need delete some image
+
+      const response = await updatePrizeDraw(payload, images);
       const { data: responseUpdatePrizeDraw = {} } = response;
 
       if (responseUpdatePrizeDraw && responseUpdatePrizeDraw.success) {
@@ -252,7 +255,7 @@ const RegisterPrizeDraw = () => {
         }
       }
     } else {
-      const response = await newPrizeDraw(payload); 
+      const response = await newPrizeDraw(payload);
       const { data: responseNewPrizeDraw = {} } = response;
 
       if (responseNewPrizeDraw && responseNewPrizeDraw.success) {
@@ -308,9 +311,11 @@ const RegisterPrizeDraw = () => {
     if (imageFiles.length < 1) return;
 
     const newImageUrls = [];
-    imageFiles.forEach(itemImg => newImageUrls.push(URL.createObjectURL(itemImg)));
+    images.length > 0 && images.forEach((el) => newImageUrls.push(el));
+    imageFiles.forEach((itemImg) =>
+      newImageUrls.push(URL.createObjectURL(itemImg))
+    );
     setImages(newImageUrls);
-
   }, [imageFiles]);
 
   return (
@@ -343,13 +348,16 @@ const RegisterPrizeDraw = () => {
         )}
         {showTickets ? (
           <>
-          <BtnNumbers>
-            <button onClick={() => setShowTickets(false)}> 
-            <FaArrowLeft />
-              Voltar
-            </button>
-          </BtnNumbers>
-            <ListTickets sorteioId={values.id} totalTickets={values.ticketQuantity} />
+            <BtnNumbers>
+              <button onClick={() => setShowTickets(false)}>
+                <FaArrowLeft />
+                Voltar
+              </button>
+            </BtnNumbers>
+            <ListTickets
+              sorteioId={values.id}
+              totalTickets={values.ticketQuantity}
+            />
           </>
         ) : (
           <>
@@ -419,7 +427,7 @@ const RegisterPrizeDraw = () => {
               </FieldContent>
             </ContainerTicket>
             <ContainerImagesUpload>
-              {images.length > 0 && 
+              {images.length > 0 &&
                 images.map((imageSrc, index) => (
                   <ContentUploadImage key={index}>
                     <img src={imageSrc} alt="imagem para upload" />
