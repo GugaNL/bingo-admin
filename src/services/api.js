@@ -175,13 +175,21 @@ export const updatePrizeDraw = async (prizeDraw = {}) => {
 };
 
 export const updateImages = async (images = [], sorteioId) => {
-  const response = await api.post(`imagem/${sorteioId}`, images, {
-    headers: {
-      token,
-    },
-  });
-
-  return response;
+  try {
+    const response = await api.post(`imagem/${sorteioId}`, images, {
+      headers: {
+        token,
+      },
+    });
+  
+    return response;
+  } catch (error) {
+    const { response: { data = [], status = "" } = "" } = error;
+    if (status === 401) {
+      return status;
+    }
+    return data[0];
+  }
 };
 
 //Bilhete

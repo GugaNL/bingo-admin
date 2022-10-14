@@ -235,7 +235,10 @@ const RegisterPrizeDraw = () => {
     };
 
     if (values.id) {
-      await updateImages(images, values.id); //first check if need delete some image
+      const responseImage = await updateImages(images, values.id); //first check if need delete some image
+      if (responseImage === 401) {
+        return setIsLogged();
+      }
 
       const response = await updatePrizeDraw(payload, images);
       const { data: responseUpdatePrizeDraw = {} } = response;
