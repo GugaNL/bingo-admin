@@ -237,6 +237,7 @@ const RegisterPrizeDraw = () => {
     if (values.id) {
       const responseImage = await updateImages(images, values.id); //first check if need delete some image
       if (responseImage === 401) {
+        setLoading(false);
         return setIsLogged();
       }
 
@@ -314,7 +315,7 @@ const RegisterPrizeDraw = () => {
     if (imageFiles.length < 1) return;
 
     const newImageUrls = [];
-    images.length > 0 && images.forEach((el) => newImageUrls.push(el));
+    //images.length > 0 && images.forEach((el) => newImageUrls.push(el));
     imageFiles.forEach((itemImg) =>
       newImageUrls.push(URL.createObjectURL(itemImg))
     );
@@ -431,14 +432,16 @@ const RegisterPrizeDraw = () => {
             </ContainerTicket>
             <ContainerImagesUpload>
               {images.length > 0 &&
-                images.map((imageSrc, index) => (
-                  <ContentUploadImage key={index}>
+                images.map((imageSrc, index) => {
+                  return (
+                    <ContentUploadImage key={index}>
                     <img src={imageSrc} alt="imagem para upload" />
                     <BtnDeleteImg onClick={() => removeImage(index)}>
                       <MdDelete />
                     </BtnDeleteImg>
                   </ContentUploadImage>
-                ))}
+                  )
+                })}
             </ContainerImagesUpload>
 
             <FieldContent>
