@@ -12,12 +12,17 @@ const SelectionFilter = (props) => {
     currentDate = new Date().getFullYear();
   }
 
-
   return (
     <Container>
       <select>
         {arrayOptions.map((item, index) => (
-          <option value={item.value} key={index} selected={item.value === currentDate}>{item.name}</option>
+          <option
+            value={item.value}
+            key={index}
+            selected={item.value === currentDate}
+          >
+            {item.name}
+          </option>
         ))}
       </select>
     </Container>

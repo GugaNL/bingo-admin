@@ -20,4 +20,16 @@ export const SubTitle = styled.h2`
 
 export const Controllers = styled.div`
   display: flex;
+  align-items: center;
+
+
 `;
+
+export const ButtonFilter = styled.button`
+  background: none;
+
+> svg {
+    color: ${(props) => props.theme.color.white};
+    font-size: 20px;
+  }
+`
