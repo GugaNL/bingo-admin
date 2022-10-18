@@ -48,6 +48,7 @@ const RegisterPrizeDraw = () => {
     ticketQuantity: 0,
   });
   const [images, setImages] = useState([]);
+  const [uploadedImages, setUploadedImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showTickets, setShowTickets] = useState(false);
@@ -119,7 +120,7 @@ const RegisterPrizeDraw = () => {
         ticketValue: sorteio.valorBilhete,
         ticketQuantity: sorteio.totalBilhetes,
       });
-      setImages(formattedImages);
+      setUploadedImages(formattedImages);
       setLoading(false);
     } else {
       setLoading(false);
@@ -191,14 +192,21 @@ const RegisterPrizeDraw = () => {
     alert("Apenas arquivos .jpeg ou .png");
   };
 
-  const removeImage = (index) => {
-    let arrayAuxFiles = imageFiles;
-    let arrayAuxImages = images;
+  const removeImage = (isUploadedImage = false, index) => {
+    if (isUploadedImage) {
+      let arrayAuxImages = uploadedImages;
 
-    arrayAuxFiles.splice(index, 1);
-    arrayAuxImages.splice(index, 1);
-    setImageFiles([...arrayAuxFiles]);
-    setImages([...arrayAuxImages]);
+      arrayAuxImages.splice(index, 1);
+      setUploadedImages([...arrayAuxImages]);
+    } else {
+      let arrayAuxFiles = imageFiles;
+      let arrayAuxImages = images;
+  
+      arrayAuxFiles.splice(index, 1);
+      arrayAuxImages.splice(index, 1);
+      setImageFiles([...arrayAuxFiles]);
+      setImages([...arrayAuxImages]);
+    }
   };
 
   const mountPrizeDesc = (desc) => {
@@ -235,7 +243,7 @@ const RegisterPrizeDraw = () => {
     };
 
     if (values.id) {
-      const responseImage = await updateImages(images, values.id); //first check if need delete some image
+      const responseImage = await updateImages(uploadedImages, values.id); //first check if need delete some image
       if (responseImage === 401) {
         setLoading(false);
         return setIsLogged();
@@ -279,43 +287,10 @@ const RegisterPrizeDraw = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const images = [];
-  //   const fileReaders = [];
-  //   let isCancel = false;
-
-  //   if (imageFiles.length > 0) {
-  //     imageFiles.forEach((file) => {
-  //       const fileReader = new FileReader();
-  //       fileReaders.push(fileReader);
-  //       fileReader.onload = (e) => {
-  //         const { result } = e.target;
-  //         if (result) {
-  //           images.push(result);
-  //         }
-  //         if (images.length === imageFiles.length && !isCancel) {
-  //           setImages([...images]);
-  //         }
-  //       };
-  //       fileReader.readAsDataURL(file);
-  //     });
-  //   }
-
-  //   return () => {
-  //     isCancel = true;
-  //     fileReaders.forEach((fileReader) => {
-  //       if (fileReader.readyState === 1) {
-  //         fileReader.abort();
-  //       }
-  //     });
-  //   };
-  // }, [imageFiles, images]);
-
   useEffect(() => {
     if (imageFiles.length < 1) return;
 
     const newImageUrls = [];
-    //images.length > 0 && images.forEach((el) => newImageUrls.push(el));
     imageFiles.forEach((itemImg) =>
       newImageUrls.push(URL.createObjectURL(itemImg))
     );
@@ -431,16 +406,27 @@ const RegisterPrizeDraw = () => {
               </FieldContent>
             </ContainerTicket>
             <ContainerImagesUpload>
+              {uploadedImages.length > 0 &&
+                uploadedImages.map((imageSrc, index) => {
+                  return (
+                    <ContentUploadImage key={index}>
+                      <img src={imageSrc} alt="imagem para upload" />
+                      <BtnDeleteImg onClick={() => removeImage(true, index)}>
+                        <MdDelete />
+                      </BtnDeleteImg>
+                    </ContentUploadImage>
+                  );
+                })}
               {images.length > 0 &&
                 images.map((imageSrc, index) => {
                   return (
                     <ContentUploadImage key={index}>
-                    <img src={imageSrc} alt="imagem para upload" />
-                    <BtnDeleteImg onClick={() => removeImage(index)}>
-                      <MdDelete />
-                    </BtnDeleteImg>
-                  </ContentUploadImage>
-                  )
+                      <img src={imageSrc} alt="imagem para upload" />
+                      <BtnDeleteImg onClick={() => removeImage(index)}>
+                        <MdDelete />
+                      </BtnDeleteImg>
+                    </ContentUploadImage>
+                  );
                 })}
             </ContainerImagesUpload>
 
