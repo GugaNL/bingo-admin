@@ -10,8 +10,8 @@ const ContentHeader = (props) => {
       <SubTitle>{title}</SubTitle>
       {showFilters && (
         <Controllers>
-          <SelectionFilter arrayOptions={months} />
-          <SelectionFilter arrayOptions={years} />
+          <SelectionFilter arrayOptions={months} type="month" />
+          <SelectionFilter arrayOptions={years} type="year" />
         </Controllers>
       )}
     </Container>

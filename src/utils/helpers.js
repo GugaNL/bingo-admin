@@ -100,3 +100,9 @@ export const formatTime = (rawDate) => {
 
   return formattedStringTime;
 };
+
+export const capitalizeFirstLetter = (word) => {
+  const capitalizeWord = word.charAt(0).toUpperCase() + word.slice(1);
+
+  return capitalizeWord;
+};
