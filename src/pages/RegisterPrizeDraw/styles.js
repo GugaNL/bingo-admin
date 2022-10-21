@@ -89,7 +89,7 @@ export const ContentUploadImage = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
-  width: 300px;
+  width: 350px;
   height: 300px;
   border: 1px solid ${(props) => props.theme.color.gray};
   margin-top: 40px;
@@ -97,8 +97,9 @@ export const ContentUploadImage = styled.div`
   //overflow: hidden;
 
   > img {
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 `;
 
