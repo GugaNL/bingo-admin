@@ -422,7 +422,7 @@ const RegisterPrizeDraw = () => {
                   return (
                     <ContentUploadImage key={index}>
                       <img src={imageSrc} alt="imagem para upload" />
-                      <BtnDeleteImg onClick={() => removeImage(index)}>
+                      <BtnDeleteImg onClick={() => removeImage(false, index)}>
                         <MdDelete />
                       </BtnDeleteImg>
                     </ContentUploadImage>
