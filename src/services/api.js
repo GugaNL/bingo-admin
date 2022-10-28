@@ -243,7 +243,7 @@ export const updateTicket = async (ticket = {}) => {
     );
     return response;
   } catch (error) {
-    const { response: { data = [], status = "" } = "" } = error;
+    const { response: { data = [], status = "" } = "" } = error; 
     if (status === 401) {
       return status;
     }
@@ -275,6 +275,66 @@ export const loginUser = async (email, password) => {
       login: email,
       senha: password,
     });
+    return response;
+  } catch (error) {
+    const { response: { data = [] } = "" } = error;
+    return data[0];
+  }
+};
+
+//Payment Info
+export const createPaymentInfo = async (paymentInfo) => {
+  try {
+    const response = await api.post("paymentinfo/novo", {
+      paymentMethod: paymentInfo.paymentMethod,
+      pixType: paymentInfo.pixType,
+      paymentNumber: paymentInfo.pixNumber,
+      owner: paymentInfo.owner,
+      bank: paymentInfo.bank
+    }, {
+      headers: {
+        token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    const { response: { data = [] } = "", status = "" } = error;
+    if (status === 401) {
+      return status;
+    }
+    return data[0];
+  }
+};
+
+export const updatePaymentInfo = async (paymentInfo = {}) => {
+  try {
+    const response = await api.put(`paymentinfo/${paymentInfo.id}`, {
+      paymentMethod: paymentInfo.paymentMethod,
+      pixType: paymentInfo.pixType,
+      paymentNumber: paymentInfo.pixNumber,
+      owner: paymentInfo.owner,
+      bank: paymentInfo.bank
+    }, {
+      headers: {
+        token,
+      },
+    });
+    return response;
+  } catch (error) {
+    const { response: { data = [], status = "" } = "" } = error;
+    if (status === 401) {
+      return status;
+    }
+    return data[0];
+  }
+};
+
+export const findPaymentMethod = async () => {
+  try {
+    const response = await api.get(
+      `paymentinfo/busca`
+    );
     return response;
   } catch (error) {
     const { response: { data = [] } = "" } = error;

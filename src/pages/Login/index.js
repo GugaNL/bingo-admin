@@ -47,7 +47,16 @@ const Login = () => {
           placeholder="Senha"
           onChange={(event) => onChangeInput(event.target)}
         ></Input>
-        <Button onClick={() => onLogin()}>Acessar</Button>
+        <Button
+          onClick={() => onLogin()}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              onLogin();
+            }
+          }}
+        >
+          Acessar
+        </Button>
       </Form>
     </Container>
   );
