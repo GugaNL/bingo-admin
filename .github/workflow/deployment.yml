@@ -1,12 +1,11 @@
 name: Deploy
 
 on:
-  workflow_dispatch:
   push:
-    branches: ["*"]
+    branches: [main]
 # npm ci is best practices, will ensure that use the package-lock with the versions on there
 jobs:
-  deploy-test:
+  deploy-job:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
