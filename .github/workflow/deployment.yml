@@ -7,7 +7,6 @@ on:
 # npm ci is best practices, will ensure that use the package-lock with the versions on there
 jobs:
   deploy-test:
-    if: github.ref == 'refs/heads/stage'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
