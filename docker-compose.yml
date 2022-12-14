@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  sorteiofrontend:
+    container_name: container-sorteiosfront
+    image: guganl/frontend-sorteios
+    build: .
+    ports: 
+      - "3000:3000"
