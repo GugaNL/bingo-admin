@@ -1,0 +1,18 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["*"]
+# npm ci is best practices, will ensure that use the package-lock with the versions on there
+jobs:
+  deploy-test:
+    if: github.ref == 'refs/heads/stage'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - run: npm ci
+      - run: npm run build
