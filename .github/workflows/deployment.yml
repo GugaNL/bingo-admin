@@ -16,4 +16,12 @@ jobs:
         with:
           node-version: 16.x
       - run: docker-compose build
-      - run: docker-compose up -d 
+      - run: docker-compose up -d
+      - name: Docker Hub login
+        env:
+          DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USER }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+        run: docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
+      - name: Push to Docker Hub
+        run: docker push guganl/frontend-sorteios
+      
