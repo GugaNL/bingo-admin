@@ -19,8 +19,8 @@ jobs:
       - run: docker-compose up -d
       - name: Docker Hub login
         env:
-          DOCKERHUB_USER: ${{ env.DOCKERHUB_USER }}
-          DOCKERHUB_PASSWORD: ${{ env.DOCKERHUB_PASSWORD }}
+          DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USER }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
         run: docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
       - name: Push to Docker Hub
         run: docker push guganl/frontend-sorteios
