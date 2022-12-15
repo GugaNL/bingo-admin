@@ -2,7 +2,8 @@ name: Deploy
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 # npm ci is best practices, will ensure that use the package-lock with the versions on there
 jobs:
   deploy-job:
