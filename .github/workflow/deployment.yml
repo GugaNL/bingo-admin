@@ -1,17 +1,21 @@
 name: Deploy
 
+#will dispatch the deploy when active manually (workflow_dispatch) or by push on the branches bellow
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - main
-# npm ci is best practices, will ensure that use the package-lock with the versions on there
+    branches: [main, stage]
+  
 jobs:
-  deploy-job:
-    runs-on: ubuntu-latest
+  deploy-front:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-20.04
+    concurrency: deploy-to-front
     steps:
       - uses: actions/checkout@v2
+      - name: Use Node.js 10.x
       - uses: actions/setup-node@v2
         with:
-          node-version: 16
+          node-version: 16.x
       - run: npm ci
       - run: npm run build
