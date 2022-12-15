@@ -20,7 +20,7 @@ jobs:
       - name: Docker Hub login
         env:
           DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USER }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
         run: docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
       #- name: Push to Docker Hub
       #  run: docker push guganl/frontend-sorteios
