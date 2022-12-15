@@ -4,17 +4,15 @@ name: Deploy
 on:
   workflow_dispatch:
   push:
-    branches: [main, stage]
+    branches: ["*"]
   
 jobs:
   deploy-front:
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     concurrency: deploy-to-front
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: 16.x
-      - run: npm ci
-      - run: npm run build
+      - run: docker build -t container-sorteiosfront .
