@@ -3,7 +3,7 @@ name: Deploy
 #will dispatch the deploy when active manually (workflow_dispatch) or by push on the branches bellow
 on:
   workflow_dispatch:
-  push:
+  push: 
     branches: ["*"]
   
 jobs:
