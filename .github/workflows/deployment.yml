@@ -16,4 +16,5 @@ jobs:
         with:
           node-version: 16.x
       - name: Build and run dock image and container
-      - run: docker-compose up --build 
+      - run: docker-compose build
+      - run: docker-compose up -d 
