@@ -12,8 +12,8 @@ RUN npm i
 #Copy the rest of project folders to the workdir created previously to the docker container
 COPY . .
 
-#Use port 80
-EXPOSE 80
+#Use port 3000
+EXPOSE 3000
 
 #Execute commands for initialize the project
 CMD ["npm", "start"]
