@@ -1,6 +1,9 @@
 #Use node light version for linux
 FROM node:14-alpine
 
+#Install react on linux
+RUN npm install -g create-react-app
+
 #Create the folder where will be use for all processes bellow
 WORKDIR /app
 
