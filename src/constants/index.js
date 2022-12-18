@@ -1,6 +1,7 @@
 //Server
 //export const baseURL = "http://localhost:5000/api/";
-export const baseURL = "https://sorteio-nodejs.herokuapp.com/api/";
+export const baseURL = "http://142.93.194.174:5000/api/";
+//export const baseURL = "https://sorteio-nodejs.herokuapp.com/api/";
 
 //Pages
 export const PAGE_LIST_PRIZE_DRAW = '/sweepstakes';
