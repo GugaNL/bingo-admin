@@ -15,6 +15,8 @@ RUN npm install
 #Copy the rest of project folders to the workdir created previously to the docker container
 COPY . .
 
+ENV GENERATE_SOURCEMAP=false
+
 #Use port 3000
 EXPOSE 3000
 
