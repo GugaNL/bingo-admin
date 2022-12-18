@@ -7,7 +7,7 @@ WORKDIR /app
 #Copy package.json and package-lock.json if exist to the workdir created previously
 COPY package*.json ./
 
-RUN npm i
+RUN npm install
 
 #Copy the rest of project folders to the workdir created previously to the docker container
 COPY . .
